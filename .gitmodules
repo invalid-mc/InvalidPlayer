@@ -1,0 +1,3 @@
+[submodule "SYEngine"]
+	path = SYEngine
+	url = https://github.com/amamiya/SYEngine.git
