@@ -22,9 +22,7 @@
                       VerticalAlignment="Center" AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
                       BufferingProgressChanged="player_BufferingProgressChanged"
                       DownloadProgressChanged="player_DownloadProgressChanged" />
-        <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Fill="#FFFD0C8E">
-
-        </Rectangle>
+        <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Fill="#FFFD0C8E" />
         <TextBlock Margin="3,0" Text="0%" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"
                    x:Name="BufferingProgressTextBlock" />
         <Button HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Play"
@@ -32,6 +30,6 @@
         <TextBox Margin="3,0" Text="http://v.youku.com/v_show/id_XOTI2NDI4ODgw.html" HorizontalAlignment="Stretch"
                  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="WebUrlTextBox" TextWrapping="NoWrap"
                  InputScope="Url" />
-      
+
     </Grid>
 </Page>
