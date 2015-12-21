@@ -78,18 +78,18 @@ namespace InvalidPlayer.Parser.Youku
 
         private static PlayInfoResultItem[] GetVaildItmes(DecodedPlayInfo decodedInfo)
         {
-            var mp4 = decodedInfo.Results.Mp4;
-            if (null != mp4 && mp4.Length > 0)
-            {
-                Debug.WriteLine("mp4 from youku");
-                return mp4;
-            }
-
             var flvhd = decodedInfo.Results.Flvhd;
             if (null != flvhd && flvhd.Length > 0)
             {
                 Debug.WriteLine("flvhd from youku");
                 return flvhd;
+            }
+
+            var mp4 = decodedInfo.Results.Mp4;
+            if (null != mp4 && mp4.Length > 0)
+            {
+                Debug.WriteLine("mp4 from youku");
+                return mp4;
             }
 
             var flv = decodedInfo.Results.Flv;
