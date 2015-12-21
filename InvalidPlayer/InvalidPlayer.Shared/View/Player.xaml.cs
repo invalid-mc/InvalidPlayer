@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
 using InvalidPlayer.Parser.Youku;
+using SYEngineCore;
 
 namespace InvalidPlayer.View
 {
@@ -36,29 +37,29 @@ namespace InvalidPlayer.View
             {
                 try
                 {
-                    var urls = await _youkuVideoUrlParser.ParseAsync(youkuUrl);
-                    if (urls.Count > 1)
+                    var videos = await _youkuVideoUrlParser.ParseAsync(youkuUrl);
+                    if (videos.Count > 1)
                     {
-                        SYEngineCore.Playlist plist = new SYEngineCore.Playlist(SYEngineCore.PlaylistTypes.NetworkHttp);
-                        SYEngineCore.PlaylistNetworkConfigs cfgs = default(SYEngineCore.PlaylistNetworkConfigs);
+                        var plist = new Playlist(PlaylistTypes.NetworkHttp);
+                        var cfgs = default(PlaylistNetworkConfigs);
                         cfgs.DownloadRetryOnFail = true;
-                        cfgs.DetectDurationForParts = true;
+                        cfgs.DetectDurationForParts = false;
                         cfgs.HttpUserAgent = string.Empty;
                         cfgs.HttpReferer = string.Empty;
                         cfgs.HttpCookie = string.Empty;
                         cfgs.TempFilePath = string.Empty;
                         plist.NetworkConfigs = cfgs;
-                        foreach (var url in urls)
+                        foreach (var video in videos)
                         {
-                            plist.Append(url, 0, 0);
+                            plist.Append(video.Url, video.Size, video.Seconds);
                         }
                         var s = "plist://WinRT-TemporaryFolder_" +
                                 Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                         MainPlayer.Source = new Uri(s);
                     }
-                    else if (urls.Count == 1)
+                    else if (videos.Count == 1)
                     {
-                        MainPlayer.Source = new Uri(urls[0]);
+                        MainPlayer.Source = new Uri(videos[0].Url);
                     }
                 }
                 catch (Exception exception)
