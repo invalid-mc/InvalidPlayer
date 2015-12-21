@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="InvalidPlayer.View.Player"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="36" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <MediaElement x:Name="MainPlayer" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center" AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
+                      BufferingProgressChanged="player_BufferingProgressChanged"
+                      DownloadProgressChanged="player_DownloadProgressChanged" />
+        <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Fill="#FFFD0C8E">
+
+        </Rectangle>
+        <TextBlock Margin="3,0" Text="0%" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"
+                   x:Name="BufferingProgressTextBlock" />
+        <Button HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Play"
+                x:Name="YoukuBtn" Click="YoukuBtn_OnClick" />
+        <TextBox Margin="3,0" Text="http://v.youku.com/v_show/id_XOTI2NDI4ODgw.html" HorizontalAlignment="Stretch"
+                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="WebUrlTextBox" TextWrapping="NoWrap"
+                 InputScope="Url" />
+      
+    </Grid>
+</Page>
