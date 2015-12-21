@@ -130,9 +130,12 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
-    <SDKReference Include="ShanYe MediaPlayer Engine %28Windows 8.1%29, Version=1.0.4">
-      <Name>ShanYe MediaPlayer Engine %28Windows 8.1%29</Name>
-    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SYEngine\SYEngineCore\SYEngineCore.Windows\SYEngineCore.Windows.vcxproj">
+      <Project>{371b4e0d-44ec-4781-8350-55471e26c599}</Project>
+      <Name>SYEngineCore.Windows</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
