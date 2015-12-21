@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoUrlParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youku\YoukuAes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youku\YoukuParser.cs" />
