@@ -37,21 +37,29 @@ namespace InvalidPlayer.View
                 try
                 {
                     var urls = await _youkuVideoUrlParser.ParseAsync(youkuUrl);
-                    SYEngineCore.Playlist plist = new SYEngineCore.Playlist(SYEngineCore.PlaylistTypes.NetworkHttp);
-                    SYEngineCore.PlaylistNetworkConfigs cfgs = default(SYEngineCore.PlaylistNetworkConfigs);
-                    cfgs.DownloadRetryOnFail = true;
-                    cfgs.DetectDurationForParts = true;
-                    cfgs.HttpUserAgent = string.Empty;
-                    cfgs.HttpReferer = string.Empty;
-                    cfgs.HttpCookie = string.Empty;
-                    cfgs.TempFilePath = string.Empty;
-                    plist.NetworkConfigs = cfgs;
-                    foreach (var url in urls)
+                    if (urls.Count > 1)
                     {
-                        plist.Append(url, 0, 0);
+                        SYEngineCore.Playlist plist = new SYEngineCore.Playlist(SYEngineCore.PlaylistTypes.NetworkHttp);
+                        SYEngineCore.PlaylistNetworkConfigs cfgs = default(SYEngineCore.PlaylistNetworkConfigs);
+                        cfgs.DownloadRetryOnFail = true;
+                        cfgs.DetectDurationForParts = true;
+                        cfgs.HttpUserAgent = string.Empty;
+                        cfgs.HttpReferer = string.Empty;
+                        cfgs.HttpCookie = string.Empty;
+                        cfgs.TempFilePath = string.Empty;
+                        plist.NetworkConfigs = cfgs;
+                        foreach (var url in urls)
+                        {
+                            plist.Append(url, 0, 0);
+                        }
+                        var s = "plist://WinRT-TemporaryFolder_" +
+                                Path.GetFileName(await plist.SaveAndGetFileUriAsync());
+                        MainPlayer.Source = new Uri(s);
                     }
-                    var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
-                    MainPlayer.Source = new Uri(s);
+                    else if (urls.Count == 1)
+                    {
+                        MainPlayer.Source = new Uri(urls[0]);
+                    }
                 }
                 catch (Exception exception)
                 {
