@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
