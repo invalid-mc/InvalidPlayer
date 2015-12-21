@@ -108,9 +108,12 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
-    <SDKReference Include="ShanYe MediaPlayer Engine %28Windows Phone 8.1%29, Version=1.0.4">
-      <Name>ShanYe MediaPlayer Engine %28Windows Phone 8.1%29</Name>
-    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SYEngine\SYEngineCore\SYEngineCore.WindowsPhone\SYEngineCore.WindowsPhone.vcxproj">
+      <Project>{6c77118b-c47c-461b-8d53-ab673c312dac}</Project>
+      <Name>SYEngineCore.WindowsPhone</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
