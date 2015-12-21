@@ -15,7 +15,7 @@ namespace InvalidPlayer.Parser.Youku
     {
         private static readonly Regex VideoIdRegex = new Regex("(?<=id_)(\\w+)");
         private static readonly string Did = "1da86bf9970e91bd58f0312781e761c6";
-        private static readonly string VideoFormat = "1,3,5"; //HD, ThreeGP, FLV, ThreeGPHD, FLVHD,  M3U8,  HD2
+        private static readonly string VideoFormat = "1,3,5,7"; //HD, ThreeGP, FLV, ThreeGPHD, FLVHD,  M3U8,  HD2
 
         private static readonly string UserAgent = "Youku;3.7;WindowsPhone;8.10.14219.0;8X";
 
@@ -78,11 +78,11 @@ namespace InvalidPlayer.Parser.Youku
 
         private static PlayInfoResultItem[] GetVaildItmes(DecodedPlayInfo decodedInfo)
         {
-            var flvhd = decodedInfo.Results.Flvhd;
-            if (null != flvhd && flvhd.Length > 0)
+            var hd2 = decodedInfo.Results.Hd2;
+            if (null != hd2 && hd2.Length > 0)
             {
-                Debug.WriteLine("flvhd from youku");
-                return flvhd;
+                Debug.WriteLine("hd2 from youku");
+                return hd2;
             }
 
             var mp4 = decodedInfo.Results.Mp4;
@@ -90,6 +90,13 @@ namespace InvalidPlayer.Parser.Youku
             {
                 Debug.WriteLine("mp4 from youku");
                 return mp4;
+            }
+
+            var flvhd = decodedInfo.Results.Flvhd;
+            if (null != flvhd && flvhd.Length > 0)
+            {
+                Debug.WriteLine("flvhd from youku");
+                return flvhd;
             }
 
             var flv = decodedInfo.Results.Flv;
