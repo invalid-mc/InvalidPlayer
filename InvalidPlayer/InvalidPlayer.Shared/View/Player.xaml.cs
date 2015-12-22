@@ -22,11 +22,12 @@ namespace InvalidPlayer.View
 
         private void player_BufferingProgressChanged(object sender, RoutedEventArgs e)
         {
+            BufferingProgressTextBlock.Text = $"{MainPlayer.BufferingProgress* 100}%";
         }
 
         private void player_DownloadProgressChanged(object sender, RoutedEventArgs e)
         {
-            BufferingProgressTextBlock.Text = $"Downloaded {MainPlayer.DownloadProgress*100}%";
+          
         }
 
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
@@ -51,7 +52,7 @@ namespace InvalidPlayer.View
                         foreach (var video in videos)
                         {
                             plist.Append(video.Url, video.Size, (float) video.Seconds);
-                            cfgs.ExplicitTotalDurationSeconds += video.Seconds;
+                            //cfgs.ExplicitTotalDurationSeconds += video.Seconds;
                         }
                         var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                         MainPlayer.Source = new Uri(s);
