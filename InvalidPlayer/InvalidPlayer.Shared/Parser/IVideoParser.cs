@@ -4,7 +4,7 @@ using InvalidPlayer.Model;
 
 namespace InvalidPlayer.Parser
 {
-    public interface IVideoUrlParser
+    public interface IVideoParser
     {
         Task<List<VideoItem>> ParseAsync(string url);
     }

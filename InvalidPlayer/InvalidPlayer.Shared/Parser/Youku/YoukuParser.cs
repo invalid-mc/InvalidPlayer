@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace InvalidPlayer.Parser.Youku
 {
-    public class YoukuParser : IVideoUrlParser
+    public class YoukuParser : IVideoParser
     {
         private static readonly Regex VideoIdRegex = new Regex("(?<=id_)(\\w+)");
         private static readonly string Did = "1da86bf9970e91bd58f0312781e761c6";
@@ -31,14 +31,13 @@ namespace InvalidPlayer.Parser.Youku
         {
             var id = GetVideoId(url);
             Assert(string.IsNullOrEmpty(id), "invalid url");
-
-            var infoUrl = string.Format(ApiUrl, id, VideoFormat, Did);
-            return await DoParseAsync(infoUrl, Did);
+            return await DoParseAsync(id);
         }
 
-
-        public async Task<List<VideoItem>> DoParseAsync(string infoUrl, string did)
+        public async Task<List<VideoItem>> DoParseAsync(string id)
         {
+            var infoUrl = string.Format(ApiUrl, id, VideoFormat, Did);
+
             var result = await GetVideoInfoFromServer(infoUrl);
             Assert(string.IsNullOrEmpty(result), "get nothing from server");
 
@@ -67,7 +66,7 @@ namespace InvalidPlayer.Parser.Youku
                 param.Add("oip", playInfoSidData.Oip);
                 foreach (var item in items)
                 {
-                    var newUrl = BuildUrlWithToken(item.Url, param, item.FileId, did);
+                    var newUrl = BuildUrlWithToken(item.Url, param, item.FileId, Did);
                     videoItems.Add(new VideoItem {Seconds = item.Seconds, Size = item.Size, Url = newUrl});
                 }
             }
@@ -125,7 +124,7 @@ namespace InvalidPlayer.Parser.Youku
         }
 
 
-        public string GetVideoId(string url)
+        public  string GetVideoId(string url)
         {
             var match = VideoIdRegex.Match(url);
             return match.ToString();

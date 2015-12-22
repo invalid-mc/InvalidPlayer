@@ -9,10 +9,10 @@
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="36" />
             <RowDefinition Height="36" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="0" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -22,13 +22,14 @@
                       VerticalAlignment="Center" AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
                       BufferingProgressChanged="player_BufferingProgressChanged"
                       DownloadProgressChanged="player_DownloadProgressChanged" />
-        <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Fill="#FFFD0C8E" />
+        <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Fill="DeepPink" />
         <TextBlock Margin="3,0" Text="0%" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"
-                   x:Name="BufferingProgressTextBlock" />
+                   x:Name="BufferingProgressTextBlock" FontSize="15" />
         <Button HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Play"
-                x:Name="YoukuBtn" Click="YoukuBtn_OnClick" />
-        <TextBox Margin="3,0" Text="http://v.youku.com/v_show/id_XOTI2NDI4ODgw.html" HorizontalAlignment="Stretch"
-                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="WebUrlTextBox" TextWrapping="NoWrap"
+                Click="YoukuBtn_OnClick" />
+        <TextBox Margin="3,0" Text="http://tv.sohu.com/20140722/n402535630.shtml" HorizontalAlignment="Stretch"
+                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="WebUrlTextBox" VerticalAlignment="Center"
+                 TextWrapping="NoWrap"
                  InputScope="Url" />
 
     </Grid>

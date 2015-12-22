@@ -5,20 +5,19 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
-using InvalidPlayer.Parser.Youku;
 using SYEngineCore;
 
 namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        private readonly IVideoUrlParser _youkuVideoUrlParser;
+        private readonly IVideoParser _videoParser;
 
         public Player()
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-            _youkuVideoUrlParser = new YoukuParser();
+            _videoParser = new VideoParser();
         }
 
         private void player_BufferingProgressChanged(object sender, RoutedEventArgs e)
@@ -37,7 +36,7 @@ namespace InvalidPlayer.View
             {
                 try
                 {
-                    var videos = await _youkuVideoUrlParser.ParseAsync(youkuUrl);
+                    var videos = await _videoParser.ParseAsync(youkuUrl);
                     if (videos.Count > 1)
                     {
                         var plist = new Playlist(PlaylistTypes.NetworkHttp);
@@ -51,10 +50,10 @@ namespace InvalidPlayer.View
                         plist.NetworkConfigs = cfgs;
                         foreach (var video in videos)
                         {
-                            plist.Append(video.Url, video.Size, video.Seconds);
+                            plist.Append(video.Url, video.Size, (float) video.Seconds);
+                            cfgs.ExplicitTotalDurationSeconds += video.Seconds;
                         }
-                        var s = "plist://WinRT-TemporaryFolder_" +
-                                Path.GetFileName(await plist.SaveAndGetFileUriAsync());
+                        var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                         MainPlayer.Source = new Uri(s);
                     }
                     else if (videos.Count == 1)
