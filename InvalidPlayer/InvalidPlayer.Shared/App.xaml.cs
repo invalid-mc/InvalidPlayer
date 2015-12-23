@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.View;
 using SYEngineCore;
+using System.Threading.Tasks;
 
 namespace InvalidPlayer
 {
@@ -17,12 +18,19 @@ namespace InvalidPlayer
         {
             InitializeComponent();
             Suspending += OnSuspending;
+            Init();
         }
 
+        public void Init()
+        {
+            Task.Run(() =>
+            {
+                Core.Initialize();
+            });
+        }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Core.Initialize();
             var rootFrame = BuildRootFrame(e.PreviousExecutionState);
             BuildRootContent(rootFrame, e.Arguments);
             Window.Current.Activate();
@@ -60,7 +68,6 @@ namespace InvalidPlayer
 #if WINDOWS_PHONE_APP
                 rootFrame.ContentTransitions = null;
 #endif
-
                 if (!rootFrame.Navigate(typeof (Player), param))
                 {
                     throw new Exception("Failed to create initial page");

@@ -36,6 +36,7 @@ namespace InvalidPlayer.View
                     var url = form.GetFirstValueByName("url");
                     if (!string.IsNullOrEmpty(url))
                     {
+                        WebUrlTextBox.Text = url;
                         await Play(url);
                     }
                 }
