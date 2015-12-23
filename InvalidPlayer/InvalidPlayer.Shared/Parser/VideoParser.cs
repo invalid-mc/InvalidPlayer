@@ -29,7 +29,7 @@ namespace InvalidPlayer.Parser
 
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
-            var parser = GetParser(url);
+            var parser = GetParser(url.ToLower());
             AssertUtil.NotNull(parser, "unsupport url");
 
             return await parser.ParseAsync(url);
