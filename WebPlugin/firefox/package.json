@@ -1,6 +1,6 @@
 {
   "title": "InvalidPlayer",
-  "name": "firefox",
+  "name": "InvalidPlayer",
   "version": "0.0.1",
   "description": "InvalidPlayer",
   "main": "index.js",
