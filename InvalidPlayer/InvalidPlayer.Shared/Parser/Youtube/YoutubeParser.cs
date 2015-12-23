@@ -21,6 +21,11 @@ namespace InvalidPlayer.Parser.Youtube
             _httpClient = new HttpClient();
         }
 
+        public string Name
+        {
+            get { return "youtube"; }
+        }
+
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = GetVideoId(url);

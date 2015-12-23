@@ -22,6 +22,11 @@ namespace InvalidPlayer.Parser.Tudou
             _httpClient = new HttpClient();
         }
 
+        public string Name
+        {
+            get { return "tudou"; }
+        }
+
         public new async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = await GetVideoId(url);

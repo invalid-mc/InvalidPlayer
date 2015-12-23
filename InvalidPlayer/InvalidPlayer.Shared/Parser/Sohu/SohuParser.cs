@@ -20,6 +20,11 @@ namespace InvalidPlayer.Parser.Sohu
             _httpClient = new HttpClient();
         }
 
+        public string Name
+        {
+            get { return "sohu"; }
+        }
+
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = await GetVideoId(url);

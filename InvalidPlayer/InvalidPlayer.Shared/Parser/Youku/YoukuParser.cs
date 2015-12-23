@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using InvalidPlayer.Model;
+using InvalidPlayer.Service;
 using Newtonsoft.Json;
 
 namespace InvalidPlayer.Parser.Youku
@@ -27,10 +26,15 @@ namespace InvalidPlayer.Parser.Youku
             _httpClient = new HttpClient();
         }
 
+        public string Name
+        {
+            get { return "youku"; }
+        }
+
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = GetVideoId(url);
-            Assert(string.IsNullOrEmpty(id), "invalid url");
+            AssertUtil.HasText(id, "unsupport url");
             return await DoParseAsync(id);
         }
 
@@ -39,16 +43,15 @@ namespace InvalidPlayer.Parser.Youku
             var infoUrl = string.Format(ApiUrl, id, VideoFormat, Did);
 
             var result = await GetVideoInfoFromServer(infoUrl);
-            Assert(string.IsNullOrEmpty(result), "get nothing from server");
+            AssertUtil.HasText(result, "can't get video info  from youku server");
 
             var info = JsonConvert.DeserializeObject<PlayInfo>(result);
             var decodedData = YoukuAes.Decrypt(info.Data);
             var decodedInfo = JsonConvert.DeserializeObject<DecodedPlayInfo>(decodedData);
-
-            Assert(null == decodedInfo.Results, "no results");
+            AssertUtil.NotNull(decodedInfo.Results, "no results");
 
             var items = GetVaildItmes(decodedInfo);
-            Assert(null == items, "can't find support videos");
+            AssertUtil.NotNull(items, "no videos");
 
             var playInfoSidData = decodedInfo.Sid_data;
 
@@ -60,13 +63,9 @@ namespace InvalidPlayer.Parser.Youku
             }
             else
             {
-                var param = new Dictionary<string, string>(3);
-                param.Add("sid", playInfoSidData.Sid);
-                param.Add("token", playInfoSidData.Token);
-                param.Add("oip", playInfoSidData.Oip);
                 foreach (var item in items)
                 {
-                    var newUrl = BuildUrlWithToken(item.Url, param, item.FileId, Did);
+                    var newUrl = await BuildUrlWithToken(item.Url, playInfoSidData, item.FileId, Did);
                     videoItems.Add(new VideoItem {Seconds = item.Seconds, Size = item.Size, Url = newUrl});
                 }
             }
@@ -124,46 +123,26 @@ namespace InvalidPlayer.Parser.Youku
         }
 
 
-        public  string GetVideoId(string url)
+        public string GetVideoId(string url)
         {
             var match = VideoIdRegex.Match(url);
             return match.ToString();
         }
 
-        private string BuildUrlWithToken(string url, Dictionary<string, string> param, string fileId, string did)
+        private async Task<string> BuildUrlWithToken(string url, DecodedPlayInfo.PlayInfoSidData playInfoSidData, string fileId, string did)
         {
-            var sb = new StringBuilder(url);
-            sb.Append("&");
-            if (param != null)
-            {
-                foreach (var entry in param)
-                {
-                    sb.Append(entry.Key).Append("=");
-                    var value = entry.Value;
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        sb.Append("");
-                    }
-                    else
-                    {
-                        sb.Append(WebUtility.UrlEncode(value));
-                    }
-                    sb.Append('&');
-                }
-                sb.Append("ev=1&ctype=22&");
-                sb.Append("did=").Append(WebUtility.UrlEncode(did)).Append('&');
-                var ep = YoukuAes.Encrypt(param["sid"] + "_" + fileId + "_" + param["token"]);
-                sb.Append("ep=").Append(WebUtility.UrlEncode(ep));
-            }
-            return sb.ToString();
-        }
-
-        private void Assert(bool value, string message)
-        {
-            if (value)
-            {
-                throw new Exception(message);
-            }
+            var param = new Dictionary<string, string>(7);
+            param.Add("sid", playInfoSidData.Sid);
+            param.Add("token", playInfoSidData.Token);
+            param.Add("oip", playInfoSidData.Oip);
+            param.Add("ev", "1");
+            param.Add("ctype", "22");
+            param.Add("did", did);
+            var ep = YoukuAes.Encrypt(string.Join("_", param["sid"], fileId, param["token"]));
+            param.Add("ep", ep);
+            var content = new HttpFormUrlEncodedContent(param);
+            url += "&" + await content.ReadAsStringAsync();
+            return url;
         }
     }
 

@@ -21,6 +21,11 @@ namespace InvalidPlayer.Parser.LeTv
             _httpClient = new HttpClient();
         }
 
+        public string Name
+        {
+            get { return "letv"; }
+        }
+
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id =await GetVideoId(url);
