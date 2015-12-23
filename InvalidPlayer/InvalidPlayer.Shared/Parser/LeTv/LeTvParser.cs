@@ -28,7 +28,7 @@ namespace InvalidPlayer.Parser.LeTv
 
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
-            var id =await GetVideoId(url);
+            var id = await GetVideoId(url);
             var queryUrl = string.Format(ApiUrl, id);
             var result = await _httpClient.GetStringAsync(new Uri(queryUrl));
             AssertUtil.HasText(result, "get nothing form letv server");
@@ -335,8 +335,8 @@ namespace InvalidPlayer.Parser.LeTv
         [JsonProperty("location")]
         public string Location { get; set; }
 
-        //  public Nodelist[] Nodelist { get; set; }
-
         //  [JsonProperty("nodelist")]
+
+        //  public Nodelist[] Nodelist { get; set; }
     }
 }
