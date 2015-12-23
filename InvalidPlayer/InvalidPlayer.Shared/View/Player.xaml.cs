@@ -3,6 +3,7 @@ using System.IO;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
 using InvalidPlayer.Parser.Youku;
@@ -35,6 +36,10 @@ namespace InvalidPlayer.View
             var youkuUrl = WebUrlTextBox.Text;
             if (!string.IsNullOrEmpty(youkuUrl))
             {
+                if (MainPlayer.CurrentState == MediaElementState.Playing)
+                {
+                    MainPlayer.Stop();
+                }
                 try
                 {
                     var videos = await _youkuVideoUrlParser.ParseAsync(youkuUrl);

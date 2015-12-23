@@ -25,6 +25,13 @@
         </m2:InitialRotationPreference>
         <m2:ApplicationView MinWidth="width320" />
       </m2:VisualElements>
+      <Extensions>
+        <Extension Category="windows.protocol">
+          <Protocol Name="weburl">
+            <DisplayName>weburl</DisplayName>
+          </Protocol>
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
