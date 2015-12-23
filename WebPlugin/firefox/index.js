@@ -13,8 +13,8 @@ var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 
 var button = buttons.ActionButton({
-  id: "mozilla-link",
-  label: "Visit Mozilla",
+  id: "invalid-player-link",
+  label: "open url in InvalidPlayer",
   icon: {
     "16": "./icon-16.png",
     "32": "./icon-32.png",
