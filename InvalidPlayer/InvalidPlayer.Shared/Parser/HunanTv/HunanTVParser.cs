@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using InvalidPlayer.Model;
@@ -9,10 +10,21 @@ using Newtonsoft.Json;
 
 namespace InvalidPlayer.Parser.HunanTv
 {
-    public class HunanTvParser : IVideoParser
+    public partial class HunanTvParser : IVideoParser
     {
+        private enum ApiMode
+        {
+            WinM3U8,
+            WinMp4,
+            //MobileM3U8,
+            MobileMp4
+        }
+
+        private static readonly ApiMode UseMobileApi = ApiMode.WinMp4; // API接口选择
+        private static readonly string RegexPattern = "(?<=#EXTINF:)(.+),[\r\n]*(.+)[\r\n]+";
         private static readonly string CustomHeaderName = "GetContentFeatures.DLNA.ORG";
         private static readonly string UserAgent = "NSPlayer/12.00.10011.16384 WMFSDK/12.00.10011.16384";
+        // 获取m3u8格式文件
         private static readonly string ApiUrl =
             "http://win.api.hunantv.com/v2/video/getSource/?vid={0}&appVersion=1.0.0.0";
 
@@ -30,19 +42,34 @@ namespace InvalidPlayer.Parser.HunanTv
 
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
-            var sourceUrl = await GetVideoSourceUrlAsync(GetVideoId(url));
-            return await ParseVideoInfoAsync(sourceUrl);
+            string id = GetVideoId(url);
+            AssertUtil.HasText(id, "unsupport url");
+
+            return await DoParseAsync(id);
         }
 
         private string GetVideoId(string url)
         {
-            var startIndex = url.LastIndexOf('/');
-            return url.Substring(startIndex + 1, url.LastIndexOf('.') - startIndex - 1);
+            var startIndex = url.LastIndexOf('/') + 1;
+            var endIndex = url.LastIndexOf('.');
+            return endIndex > startIndex ? url.Substring(startIndex, endIndex - startIndex) : url.Substring(startIndex);
+        }
+
+        private async Task<List<VideoItem>> DoParseAsync(string id)
+        {
+            switch (UseMobileApi)
+            {
+                case ApiMode.WinM3U8:
+                    return await ParseVideoInfoAsync(await GetVideoSourceUrlAsync(id));
+                case ApiMode.MobileMp4:
+                    return await ParseMobileVideoInfoAsync(await GetMobileVideoSourceUrlAsync(id));
+                default:
+                    return await ParseMp4VideoInfoAsync(await GetVideoSourceUrlAsync(id));
+            }
         }
 
         private async Task<string> GetVideoSourceUrlAsync(string id, int definition = -1)
         {
-            AssertUtil.HasText(id, "unsupport url");
             var infoUrl = string.Format(ApiUrl, id);
 
             var result = await _httpClient.GetAsync(new Uri(infoUrl));
@@ -54,15 +81,17 @@ namespace InvalidPlayer.Parser.HunanTv
             return (videoSources.FirstOrDefault(s => s.Definition == definition) ?? videoSources[0]).Url;
         }
 
-        private async Task<string> GetRealUrlAsync(string originUrl)
+        private async Task<string> GetRealUrlAsync(string originalUrl)
         {
-            var routeResult = await _httpClient.GetAsync(new Uri(originUrl));
+            var routeResult = await _httpClient.GetAsync(new Uri(originalUrl));
             routeResult.EnsureSuccessStatusCode();
             var rawRouteInfo = await routeResult.Content.ReadAsStringAsync();
 
             var routeInfo = JsonConvert.DeserializeObject<RouteInfo>(rawRouteInfo);
             return routeInfo.Info;
         }
+
+        #region m3u8文件解析
 
         private async Task<string> GetVideoHeaderAsync(string realUrl)
         {
@@ -79,22 +108,41 @@ namespace InvalidPlayer.Parser.HunanTv
             return await videoResult.Content.ReadAsStringAsync();
         }
 
-        private async Task<List<VideoItem>> ParseVideoInfoAsync(string url)
+        private async Task<List<VideoItem>> ParseVideoInfoAsync(string originalUrl)
         {
-            var realUrl = await GetRealUrlAsync(url);
-            var prefixUrl = realUrl.Substring(0, realUrl.IndexOf(".mp4", StringComparison.Ordinal) + 5);
+            var realUrl = await GetRealUrlAsync(originalUrl);
+            var prefixUrl = realUrl.Substring(0, realUrl.LastIndexOf('/') + 1);
 
             var videoHeader = await GetVideoHeaderAsync(realUrl);
             AssertUtil.HasText(videoHeader, "cannot get video info");
 
-            var itemsRawInfo = videoHeader.Split(new[] { "#EXTINF:" }, StringSplitOptions.RemoveEmptyEntries);
-            return itemsRawInfo.Skip(1).Select(r =>
-            {
-                var strs = r.Split(',');
-                // TODO: Size
-                return new VideoItem { Seconds = double.Parse(strs[0]), Url = prefixUrl + strs[1] };
-            }).ToList();
+            var regex = new Regex(RegexPattern);
+            var matches = regex.Matches(videoHeader);
+            var ret = new List<VideoItem>(matches.Count);
+            ret.AddRange(from Match match in matches
+                select
+                    new VideoItem
+                    {
+                        Seconds = double.Parse(match.Groups[0].Value),
+                        Url = prefixUrl + match.Groups[1].Value
+                    });
+
+            return ret;
         }
+
+        #endregion
+
+        #region mp4文件获取
+
+        private async Task<List<VideoItem>> ParseMp4VideoInfoAsync(string originalUrl)
+        {
+            var mp4Url = originalUrl.Replace("/playlist.m3u8", "");
+            var realUrl = await GetRealUrlAsync(mp4Url);
+
+            return new List<VideoItem> { new VideoItem { Url = realUrl } };
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -122,7 +170,7 @@ namespace InvalidPlayer.Parser.HunanTv
             [JsonProperty("url")]
             public string Url { get; set; }
         }
-        
+
         public class DownloadSource
         {
             [JsonProperty("definition")]
