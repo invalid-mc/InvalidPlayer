@@ -17,6 +17,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\HunanTvParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\MobileParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\LeTv\LeTvParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Sohu\SohuParser.cs" />
