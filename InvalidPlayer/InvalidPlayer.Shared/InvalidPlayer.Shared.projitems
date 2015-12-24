@@ -17,7 +17,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
   
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoUrlParser.cs" />
+
 
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>

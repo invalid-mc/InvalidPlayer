@@ -94,7 +94,7 @@ namespace InvalidPlayer
         private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
         {
             var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = transitions ?? new TransitionCollection();
+            // rootFrame.ContentTransitions = transitions ?? new TransitionCollection();
             rootFrame.Navigated -= RootFrame_FirstNavigated;
         }
 #endif
