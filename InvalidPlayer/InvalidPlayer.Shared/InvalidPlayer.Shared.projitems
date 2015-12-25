@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\HunanTvParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\MobileParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\IqiyiHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\LeTv\LeTvParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Sohu\SohuParser.cs" />
@@ -27,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youku\YoukuParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\AssertUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\SecurityKit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>
@@ -43,6 +45,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Parser\QQ\" />
     <Folder Include="$(MSBuildThisFileDirectory)Parser\BiliBili\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\" />
   </ItemGroup>
 </Project>
