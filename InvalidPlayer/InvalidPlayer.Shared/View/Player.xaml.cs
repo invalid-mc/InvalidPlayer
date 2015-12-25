@@ -193,12 +193,12 @@ namespace InvalidPlayer.View
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);
                     var cfgs = default(PlaylistNetworkConfigs);
+                    cfgs.UniqueId = DateTime.UtcNow.ToString();
                     cfgs.DownloadRetryOnFail = true;
                     cfgs.DetectDurationForParts = false;
                     cfgs.HttpUserAgent = string.Empty;
                     cfgs.HttpReferer = string.Empty;
                     cfgs.HttpCookie = string.Empty;
-                    cfgs.TempFilePath = string.Empty;
                     plist.NetworkConfigs = cfgs;
                     foreach (var video in videos)
                     {
