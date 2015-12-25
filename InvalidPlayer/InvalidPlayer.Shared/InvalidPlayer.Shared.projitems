@@ -19,6 +19,7 @@
   
 
 
+    <Compile Include="$(MSBuildThisFileDirectory)Service\DeviceUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>
