@@ -8,7 +8,7 @@ namespace InvalidPlayer.Parser.Iqiyi
     public static class IqiyiHelper
     {
         private const int TimestampKey = 1771171717;
-        private const string SignKey = "iqiYI39__#1008610914816218a216784c43a08aaa";
+        private const string SignKey = "aXFpWUkzOV9fIzEwMDg2MTA5MTQ4MTYyMThhMjE2Nzg0YzQzYTA4YWFh";
 
         private static long CurrentUnixTimeMillis()
         {
@@ -21,7 +21,8 @@ namespace InvalidPlayer.Parser.Iqiyi
             var t = (num ^ TimestampKey).ToString();
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(num);
-            stringBuilder.Append(SignKey);
+            var keyBytes =Convert.FromBase64String(SignKey);
+            stringBuilder.Append(Encoding.UTF8.GetString(keyBytes,0, keyBytes.Length));
             stringBuilder.Append(GetAppVersion());
             var token = stringBuilder.ToString();
             var sign = SecurityKit.ComputeMD5(token);
