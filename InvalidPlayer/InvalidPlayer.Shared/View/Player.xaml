@@ -26,8 +26,7 @@
             AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
             BufferingProgressChanged="player_BufferingProgressChanged"
             DownloadProgressChanged="player_DownloadProgressChanged"
-            CurrentStateChanged="player_CurrentStateChanged"
-            KeyDown="player_OnKeyDown" KeyUp="player_OnKeyUp"/>
+            CurrentStateChanged="player_CurrentStateChanged"/>
 
         <Grid x:Name="InputGrid" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
@@ -40,7 +39,7 @@
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 TextWrapping="NoWrap" InputScope="Url" />
             <Button
-                Margin="3,0,12,0"
+                x:Name="SearchBtn" Margin="3,0,12,0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 Grid.Column="1" Content="Play"
                 Click="YoukuBtn_OnClick"
