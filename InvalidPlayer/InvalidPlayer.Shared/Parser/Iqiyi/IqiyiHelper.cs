@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Yuki.Common.Util;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
+using InvalidPlayer.Service;
 
 namespace InvalidPlayer.Parser.Iqiyi
 {
@@ -10,23 +12,31 @@ namespace InvalidPlayer.Parser.Iqiyi
         private const int TimestampKey = 1771171717;
         private const string SignKey = "aXFpWUkzOV9fIzEwMDg2MTA5MTQ4MTYyMThhMjE2Nzg0YzQzYTA4YWFh";
 
-        private static long CurrentUnixTimeMillis()
+        private static int CurrentUnixTimeMillis()
         {
-            return (DateTime.UtcNow.Ticks - 621355968000000000)/10000;
+            //return (DateTime.UtcNow.Ticks - 621355968000000000)/10000;
+            return (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
 
-        public static Tuple<string, string> GetSignHeader()
+        public static async Task<Tuple<string, string>> GetSignHeader()
         {
-            var num = (int) CurrentUnixTimeMillis();
+            var num = CurrentUnixTimeMillis();
             var t = (num ^ TimestampKey).ToString();
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(num);
             var keyBytes =Convert.FromBase64String(SignKey);
             stringBuilder.Append(Encoding.UTF8.GetString(keyBytes,0, keyBytes.Length));
-            stringBuilder.Append(GetAppVersion());
+            stringBuilder.Append(await GetAppVersion());
             var token = stringBuilder.ToString();
             var sign = SecurityKit.ComputeMD5(token);
             return new Tuple<string, string>(t, sign);
+        }
+
+        public static async Task AddSignHeaders(HttpRequestHeaderCollection requestHeader)
+        {
+            var header = await GetSignHeader();
+            requestHeader.Add("t", header.Item1);
+            requestHeader.Add("sign", header.Item2);
         }
 
         private static Task<string> GetAppVersion()
