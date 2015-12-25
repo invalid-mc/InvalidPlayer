@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
@@ -22,8 +25,56 @@ namespace InvalidPlayer.View
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
             _videoParser = new VideoParser();
+
+            this.Loaded += delegate
+            {
+                Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+                Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
+            };
+            this.Unloaded += delegate
+            {
+                Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
+                Window.Current.CoreWindow.KeyUp -= CoreWindow_KeyUp;
+            };
+            this.SizeChanged += delegate
+            {
+                UpdateInfo();
+            };
         }
 
+        private void CoreWindow_KeyDown(CoreWindow sender, KeyEventArgs e)
+        {
+            Debug.WriteLine("CoreW: " + MainPlayer.IsFullWindow + "\t" + e.VirtualKey);
+            var elem = FocusManager.GetFocusedElement();
+            Debug.WriteLine(elem);
+            if (elem == WebUrlTextBox || elem == SearchBtn) return;
+
+            if (e.VirtualKey == VirtualKey.F1)
+            {
+                SetInfoVisible(true);
+            }
+            else if (e.VirtualKey == VirtualKey.Enter)
+            {
+                if (Window.Current.CoreWindow.GetKeyState(VirtualKey.Control) == CoreVirtualKeyStates.Down)
+                    MainPlayer.IsFullWindow = true;
+            }
+        }
+
+        private void CoreWindow_KeyUp(CoreWindow sender, KeyEventArgs e)
+        {
+            var elem = FocusManager.GetFocusedElement();
+            if (elem == WebUrlTextBox || elem == SearchBtn) return;
+
+            if (e.VirtualKey == VirtualKey.F1)
+            {
+                SetInfoVisible(false);
+            }
+            else if (e.VirtualKey == VirtualKey.Escape)
+            {
+                MainPlayer.IsFullWindow = false;
+            }
+        }
+        
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
@@ -44,17 +95,20 @@ namespace InvalidPlayer.View
             }
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            SetInfoVisible(false);
+        }
+
         private void player_BufferingProgressChanged(object sender, RoutedEventArgs e)
         {
-            //BufferingProgressTextBlock.Text = $"{MainPlayer.BufferingProgress*100}%";
-            PlayInfo.Text = string.Format(PlayInfoStr,
-                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
-                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
-                MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
+            UpdateInfo();
         }
 
         private void player_DownloadProgressChanged(object sender, RoutedEventArgs e)
         {
+            UpdateInfo();
         }
 
         private void player_CurrentStateChanged(object sender, RoutedEventArgs e)
@@ -62,38 +116,6 @@ namespace InvalidPlayer.View
             InputGrid.Visibility = MainPlayer.CurrentState == MediaElementState.Playing
                 ? Visibility.Collapsed
                 : Visibility.Visible;
-
-            if (MainPlayer.CurrentState != MediaElementState.Playing &&
-                MainPlayer.CurrentState != MediaElementState.Buffering)
-            {
-                InfoPanel.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void player_OnKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Escape)
-            {
-                MainPlayer.IsFullWindow = false;
-            }
-            else if (e.Key == VirtualKey.Tab)
-            {
-                e.Handled = true;
-                OnTabPress(true);
-            }
-        }
-
-        private void player_OnKeyUp(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Tab)
-            {
-                e.Handled = true;
-                OnTabPress(false);
-            }
-            else if (e.Key == VirtualKey.Enter && e.KeyStatus.IsMenuKeyDown)
-            {
-                MainPlayer.IsFullWindow = true;
-            }
         }
 
         private const string VideoInfoStr = "原始分辨率：{0} * {1}\n" +
@@ -116,26 +138,36 @@ namespace InvalidPlayer.View
                                            "默认播放速率：{2}\n" +
                                            "视频拉伸方式：{3}\n";
 
-        private void OnTabPress(bool isPressed)
+        private void SetInfoVisible(bool visible)
         {
-            if (MainPlayer.CurrentState == MediaElementState.Playing ||
-                MainPlayer.CurrentState == MediaElementState.Buffering)
+            if (visible && MainPlayer.Source != null)
             {
-                InfoPanel.Visibility = isPressed ? Visibility.Visible : Visibility.Collapsed;
-                VideoInfo.Text = string.Format(VideoInfoStr,
-                    MainPlayer.NaturalVideoWidth, MainPlayer.NaturalVideoHeight,
-                    MainPlayer.AspectRatioWidth, MainPlayer.AspectRatioHeight,
-                    MainPlayer.NaturalDuration, MainPlayer.IsStereo3DVideo,
-                    MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
-                    MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
-                PlayInfo.Text = string.Format(PlayInfoStr,
-                    (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
-                    MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
-                    MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
-                MediaElemInfo.Text = string.Format(ElemInfoStr,
-                    MainPlayer.AutoPlay, MainPlayer.IsLooping,
-                    MainPlayer.DefaultPlaybackRate, MainPlayer.Stretch);
+                InfoPanel.Visibility = Visibility.Visible;
+                UpdateInfo();
             }
+            else
+            {
+                InfoPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void UpdateInfo(bool force = false)
+        {
+            if(!force && InfoPanel.Visibility== Visibility.Collapsed) return;
+            
+            VideoInfo.Text = string.Format(VideoInfoStr,
+                MainPlayer.NaturalVideoWidth, MainPlayer.NaturalVideoHeight,
+                MainPlayer.AspectRatioWidth, MainPlayer.AspectRatioHeight,
+                MainPlayer.NaturalDuration, MainPlayer.IsStereo3DVideo,
+                MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
+                MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
+            PlayInfo.Text = string.Format(PlayInfoStr,
+                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
+                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
+                MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
+            MediaElemInfo.Text = string.Format(ElemInfoStr,
+                MainPlayer.AutoPlay, MainPlayer.IsLooping,
+                MainPlayer.DefaultPlaybackRate, MainPlayer.Stretch);
         }
 
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
@@ -182,7 +214,7 @@ namespace InvalidPlayer.View
             }
             catch (Exception exception)
             {
-                var t = new MessageDialog(exception.Message).ShowAsync();
+                new MessageDialog(exception.Message).ShowAsync();
             }
         }
     }
