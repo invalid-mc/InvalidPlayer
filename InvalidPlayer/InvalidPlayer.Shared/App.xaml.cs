@@ -1,32 +1,31 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using InvalidPlayer.Service.Exceptions;
 using InvalidPlayer.View;
 using SYEngineCore;
-using System.Threading.Tasks;
 
 namespace InvalidPlayer
 {
     public sealed partial class App : Application
     {
+        private readonly AppExceptionHandle _appExceptionHandle;
 
         public App()
         {
             InitializeComponent();
+            _appExceptionHandle = new AppExceptionHandle(this);
             Suspending += OnSuspending;
             Init();
         }
 
         public void Init()
         {
-            Task.Run(() =>
-            {
-                Core.Initialize();
-            });
+            Task.Run(() => { Core.Initialize(); });
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -75,13 +74,13 @@ namespace InvalidPlayer
             }
         }
 
-        private static Frame BuildRootFrame(ApplicationExecutionState state)
+        private Frame BuildRootFrame(ApplicationExecutionState state)
         {
             var rootFrame = Window.Current.Content as Frame;
             if (rootFrame == null)
             {
-                rootFrame = new Frame();
-                rootFrame.CacheSize = 1;
+                rootFrame = new Frame {CacheSize = 3};
+                _appExceptionHandle.RegisterExceptionHandlingSynchronizationContext();
                 if (state == ApplicationExecutionState.Terminated)
                 {
                 }
@@ -90,14 +89,6 @@ namespace InvalidPlayer
             return rootFrame;
         }
 
-#if WINDOWS_PHONE_APP
-        private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
-        {
-            var rootFrame = sender as Frame;
-            // rootFrame.ContentTransitions = transitions ?? new TransitionCollection();
-            rootFrame.Navigated -= RootFrame_FirstNavigated;
-        }
-#endif
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {

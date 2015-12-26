@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.System.Profile;
-using Yuki.Common.Util;
 
 namespace InvalidPlayer.Service
 {
