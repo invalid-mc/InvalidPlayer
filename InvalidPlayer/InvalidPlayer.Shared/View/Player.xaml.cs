@@ -12,14 +12,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
-using InvalidPlayer.Parser.Youku;
 using SYEngineCore;
 
 namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        private readonly IVideoUrlParser _youkuVideoUrlParser;
+        private readonly IVideoParser _videoParser;
 
         public Player()
         {

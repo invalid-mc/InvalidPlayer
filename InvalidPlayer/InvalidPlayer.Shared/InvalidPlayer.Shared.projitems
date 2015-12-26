@@ -16,19 +16,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\HunanTvParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\HunanTv\MobileParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\ApiParam.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\DownloadService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\IqiyiHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Iqiyi\IqiyiParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\LeTv\LeTvParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Sohu\SohuParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Tudou\TudouParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Youku\YoukuAes.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\Youku\YoukuParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\AssertUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\DeviceUtil.cs" />
@@ -51,9 +40,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Parser\QQ\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Parser\BiliBili\" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 using Buffer = Windows.Storage.Streams.Buffer;
 
-namespace Yuki.Common.Util
+namespace InvalidPlayer.Service
 {
     public class SecurityKit
     {
