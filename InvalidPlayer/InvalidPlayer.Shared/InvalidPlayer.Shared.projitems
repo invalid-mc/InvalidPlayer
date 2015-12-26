@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\AppExceptionHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\ExceptionHandlingSynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\ServiceException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\SecurityKit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
