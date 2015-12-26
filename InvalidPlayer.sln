@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvalidPlayer.Universal", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SYEngine", "SYEngine", "{E2FA0073-2DB2-433D-A1DE-F31A49D91C6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvalidPlayerParser", "invalidplayerx\InvalidPlayerParser\InvalidPlayerParser.csproj", "{BAA96DD4-7884-484D-8315-7679F16BDADD}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SYEngine\MultipartStreamMatroska\MultipartStreamMatroska.Shared\MultipartStreamMatroska.Shared.vcxitems*{404150b6-9a3a-449e-a410-5d64ff3b85d3}*SharedItemsImports = 4
@@ -86,6 +88,7 @@ Global
 		SYEngine\CoreDemuxers\CoreDemuxers.Shared\CoreDemuxers.Shared.vcxitems*{b23e3639-d675-49b2-85b1-fae680012b71}*SharedItemsImports = 9
 		SYEngine\CoreCommon\CoreCommon.Shared\CoreCommon.Shared.vcxitems*{f1079a95-c042-429f-ad7b-97a91ec8be65}*SharedItemsImports = 9
 		SYEngine\ffcodecs\ffcodecs.Shared\ffcodecs.Shared.vcxitems*{7e0215a1-1e2d-414f-a8e9-ca3c7118a192}*SharedItemsImports = 9
+		InvalidPlayer\InvalidPlayer.Shared\InvalidPlayer.Shared.projitems*{baa96dd4-7884-484d-8315-7679f16bdadd}*SharedItemsImports = 4
 		SYEngine\CoreDemuxers\CoreDemuxers.Shared\CoreDemuxers.Shared.vcxitems*{927c14c4-15ff-4939-b03c-3176a684ee09}*SharedItemsImports = 4
 		InvalidPlayer\InvalidPlayer.Shared\InvalidPlayer.Shared.projitems*{f6c73521-109e-4b01-992f-5122f3e32fab}*SharedItemsImports = 4
 		SYEngine\CoreCommon\CoreCommon.Shared\CoreCommon.Shared.vcxitems*{abb4bcb5-19ff-4d89-ae67-0c4eb952ef22}*SharedItemsImports = 4
@@ -500,6 +503,25 @@ Global
 		{F6C73521-109E-4B01-992F-5122F3E32FAB}.Release|x86.ActiveCfg = Release|x86
 		{F6C73521-109E-4B01-992F-5122F3E32FAB}.Release|x86.Build.0 = Release|x86
 		{F6C73521-109E-4B01-992F-5122F3E32FAB}.Release|x86.Deploy.0 = Release|x86
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|x64.Build.0 = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Debug|x86.Build.0 = Debug|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|ARM.Build.0 = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|Win32.Build.0 = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x64.ActiveCfg = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x64.Build.0 = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x86.ActiveCfg = Release|Any CPU
+		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -541,5 +563,6 @@ Global
 		{927C14C4-15FF-4939-B03C-3176A684EE09} = {CA6A1153-0F10-41D7-B18F-942A59E00505}
 		{12C720A6-7590-4DA1-9666-0ADF59555E03} = {CA6A1153-0F10-41D7-B18F-942A59E00505}
 		{F6C73521-109E-4B01-992F-5122F3E32FAB} = {02A78F8B-6BD5-43E4-A183-C7F2DF0574A7}
+		{BAA96DD4-7884-484D-8315-7679F16BDADD} = {02A78F8B-6BD5-43E4-A183-C7F2DF0574A7}
 	EndGlobalSection
 EndGlobal
