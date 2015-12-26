@@ -135,6 +135,14 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\InvalidPlayerCore\InvalidPlayerCore.csproj">
+      <Project>{e4f614e5-616d-4f5e-99bc-3a7025db6390}</Project>
+      <Name>InvalidPlayerCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\invalidplayerx\InvalidPlayerParser\InvalidPlayerParser.csproj">
+      <Project>{baa96dd4-7884-484d-8315-7679f16bdadd}</Project>
+      <Name>InvalidPlayerParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SYEngine\SYEngineCore\SYEngineCore.Windows\SYEngineCore.Windows.vcxproj">
       <Project>{371b4e0d-44ec-4781-8350-55471e26c599}</Project>
       <Name>SYEngineCore.Windows</Name>

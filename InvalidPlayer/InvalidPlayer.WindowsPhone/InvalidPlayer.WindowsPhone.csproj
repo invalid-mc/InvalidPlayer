@@ -111,6 +111,14 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\InvalidPlayerCore\InvalidPlayerCore.csproj">
+      <Project>{e4f614e5-616d-4f5e-99bc-3a7025db6390}</Project>
+      <Name>InvalidPlayerCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\invalidplayerx\InvalidPlayerParser\InvalidPlayerParser.csproj">
+      <Project>{baa96dd4-7884-484d-8315-7679f16bdadd}</Project>
+      <Name>InvalidPlayerParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SYEngine\SYEngineCore\SYEngineCore.WindowsPhone\SYEngineCore.WindowsPhone.vcxproj">
       <Project>{6c77118b-c47c-461b-8d53-ab673c312dac}</Project>
       <Name>SYEngineCore.WindowsPhone</Name>

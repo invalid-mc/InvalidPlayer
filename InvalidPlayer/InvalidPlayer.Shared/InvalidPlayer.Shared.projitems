@@ -15,19 +15,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Model\VideoItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser\IVideoParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\AssertUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\DeviceUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\DispatcherHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\AppException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\AppExceptionHandle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\ExceptionHandlingSynchronizationContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\Exceptions\ServiceException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\Log.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\SecurityKit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InvalidPlayer.Model;
 using InvalidPlayer.Service;
+using InvalidPlayerParser;
 
 namespace InvalidPlayer.Parser
 {
@@ -45,7 +46,7 @@ namespace InvalidPlayer.Parser
             return null;
         }
 
-      
+
         private string GetName(string url)
         {
             var match = NameRegex.Match(url);
@@ -57,7 +58,19 @@ namespace InvalidPlayer.Parser
         {
             var assembly = GetType().GetTypeInfo().Assembly;
 
-            var parserTypes = assembly.DefinedTypes.Where(item =>typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item)&&!item.IsInterface&&item.AsType()!=typeof(VideoParser));
+            var parserTypes = assembly.DefinedTypes.Where(item => typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item) && !item.IsInterface && item.AsType() != typeof (VideoParser));
+
+            AddParsers(parserTypes);
+
+            assembly = typeof (Info).GetTypeInfo().Assembly;
+
+            parserTypes = assembly.DefinedTypes.Where(item => typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item));
+
+            AddParsers(parserTypes);
+        }
+
+        private void AddParsers(IEnumerable<TypeInfo> parserTypes)
+        {
             foreach (var type in parserTypes)
             {
                 Debug.WriteLine(type);

@@ -81,6 +81,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SYEngine", "SYEngine", "{E2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvalidPlayerParser", "invalidplayerx\InvalidPlayerParser\InvalidPlayerParser.csproj", "{BAA96DD4-7884-484D-8315-7679F16BDADD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvalidPlayerCore", "InvalidPlayerCore\InvalidPlayerCore.csproj", "{E4F614E5-616D-4F5E-99BC-3A7025DB6390}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SYEngine\MultipartStreamMatroska\MultipartStreamMatroska.Shared\MultipartStreamMatroska.Shared.vcxitems*{404150b6-9a3a-449e-a410-5d64ff3b85d3}*SharedItemsImports = 4
@@ -88,7 +90,6 @@ Global
 		SYEngine\CoreDemuxers\CoreDemuxers.Shared\CoreDemuxers.Shared.vcxitems*{b23e3639-d675-49b2-85b1-fae680012b71}*SharedItemsImports = 9
 		SYEngine\CoreCommon\CoreCommon.Shared\CoreCommon.Shared.vcxitems*{f1079a95-c042-429f-ad7b-97a91ec8be65}*SharedItemsImports = 9
 		SYEngine\ffcodecs\ffcodecs.Shared\ffcodecs.Shared.vcxitems*{7e0215a1-1e2d-414f-a8e9-ca3c7118a192}*SharedItemsImports = 9
-		InvalidPlayer\InvalidPlayer.Shared\InvalidPlayer.Shared.projitems*{baa96dd4-7884-484d-8315-7679f16bdadd}*SharedItemsImports = 4
 		SYEngine\CoreDemuxers\CoreDemuxers.Shared\CoreDemuxers.Shared.vcxitems*{927c14c4-15ff-4939-b03c-3176a684ee09}*SharedItemsImports = 4
 		InvalidPlayer\InvalidPlayer.Shared\InvalidPlayer.Shared.projitems*{f6c73521-109e-4b01-992f-5122f3e32fab}*SharedItemsImports = 4
 		SYEngine\CoreCommon\CoreCommon.Shared\CoreCommon.Shared.vcxitems*{abb4bcb5-19ff-4d89-ae67-0c4eb952ef22}*SharedItemsImports = 4
@@ -522,6 +523,26 @@ Global
 		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x64.Build.0 = Release|Any CPU
 		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x86.ActiveCfg = Release|Any CPU
 		{BAA96DD4-7884-484D-8315-7679F16BDADD}.Release|x86.Build.0 = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|Win32.Build.0 = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|ARM.Build.0 = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|Win32.Build.0 = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|x64.Build.0 = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -564,5 +585,6 @@ Global
 		{12C720A6-7590-4DA1-9666-0ADF59555E03} = {CA6A1153-0F10-41D7-B18F-942A59E00505}
 		{F6C73521-109E-4B01-992F-5122F3E32FAB} = {02A78F8B-6BD5-43E4-A183-C7F2DF0574A7}
 		{BAA96DD4-7884-484D-8315-7679F16BDADD} = {02A78F8B-6BD5-43E4-A183-C7F2DF0574A7}
+		{E4F614E5-616D-4F5E-99BC-3A7025DB6390} = {02A78F8B-6BD5-43E4-A183-C7F2DF0574A7}
 	EndGlobalSection
 EndGlobal
