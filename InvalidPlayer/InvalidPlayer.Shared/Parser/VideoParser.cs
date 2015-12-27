@@ -5,27 +5,22 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using InvalidPlayer.Model;
-using InvalidPlayer.Service;
+using InvalidPlayerCore.Model;
+using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Service;
 using InvalidPlayerParser;
 
 namespace InvalidPlayer.Parser
 {
-    public class VideoParser : IVideoParser
+    public class VideoParser : IVideoParserDispatcher
     {
         private static readonly Regex NameRegex = new Regex("://[^.]*?.(\\w+).(com|tv)");
         private readonly Dictionary<string, IVideoParser> _parsers;
-
-
+        
         public VideoParser()
         {
             _parsers = new Dictionary<string, IVideoParser>(10);
             InitParser();
-        }
-
-        public string Name
-        {
-            get { return "video"; }
         }
 
         public async Task<List<VideoItem>> ParseAsync(string url)
@@ -36,9 +31,9 @@ namespace InvalidPlayer.Parser
             return await parser.ParseAsync(url);
         }
 
-        private IVideoParser GetParser(string webUrl)
+        public IVideoParser GetParser(string url)
         {
-            var name = GetName(webUrl);
+            var name = GetName(url).ToLower();
             if (_parsers.ContainsKey(name))
             {
                 return _parsers[name];
