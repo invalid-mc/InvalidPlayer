@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 
-namespace InvalidPlayer.Service
+namespace InvalidPlayerCore.Service
 {
     public static class DispatcherHelper
     {

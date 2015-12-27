@@ -43,14 +43,15 @@
   <ItemGroup>
     <Compile Include="Model\VideoItem.cs" />
     <Compile Include="Parser\IVideoParser.cs" />
+    <Compile Include="Parser\IVideoParserDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AssertUtil.cs" />
     <Compile Include="Service\DeviceUtil.cs" />
     <Compile Include="Service\DispatcherHelper.cs" />
-    <Compile Include="Service\Exceptions\AppException.cs" />
-    <Compile Include="Service\Exceptions\AppExceptionHandle.cs" />
-    <Compile Include="Service\Exceptions\ExceptionHandlingSynchronizationContext.cs" />
-    <Compile Include="Service\Exceptions\ServiceException.cs" />
+    <Compile Include="Exceptions\AppException.cs" />
+    <Compile Include="Exceptions\AppExceptionHandle.cs" />
+    <Compile Include="Exceptions\ExceptionHandlingSynchronizationContext.cs" />
+    <Compile Include="Exceptions\ServiceException.cs" />
     <Compile Include="Service\Log.cs" />
     <Compile Include="Service\SecurityKit.cs" />
   </ItemGroup>

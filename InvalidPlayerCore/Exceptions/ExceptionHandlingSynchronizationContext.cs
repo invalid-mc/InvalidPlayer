@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using Windows.UI.Xaml.Controls;
 
-namespace InvalidPlayer.Service.Exceptions
+namespace InvalidPlayerCore.Exceptions
 {
     internal class ExceptionHandlingSynchronizationContext : SynchronizationContext
     {
@@ -96,7 +96,7 @@ namespace InvalidPlayer.Service.Exceptions
                 {
                     if (!HandleException(ex))
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             };
