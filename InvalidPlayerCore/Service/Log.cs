@@ -1,5 +1,4 @@
-﻿
-namespace InvalidPlayer.Service
+﻿namespace InvalidPlayerCore.Service
 {
     public static class Log
     {

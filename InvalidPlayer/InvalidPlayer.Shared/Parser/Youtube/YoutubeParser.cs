@@ -5,8 +5,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Web.Http;
-using InvalidPlayer.Model;
-using InvalidPlayer.Service;
+using InvalidPlayerCore.Model;
+using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Service;
 
 namespace InvalidPlayer.Parser.Youtube
 {

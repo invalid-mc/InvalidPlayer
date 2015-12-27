@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InvalidPlayer.Service
+namespace InvalidPlayerCore.Service
 {
     public class AssertUtil
     {

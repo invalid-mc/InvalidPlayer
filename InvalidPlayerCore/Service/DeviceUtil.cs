@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Windows.System.Profile;
+﻿using Windows.System.Profile;
 
-namespace InvalidPlayer.Service
+namespace InvalidPlayerCore.Service
 {
    public static class DeviceUtil
     {
