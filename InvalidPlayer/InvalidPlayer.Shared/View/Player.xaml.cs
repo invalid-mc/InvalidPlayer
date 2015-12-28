@@ -86,7 +86,7 @@ namespace InvalidPlayer.View
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
             if (e.Parameter is Uri)
             {
-                var uri = (Uri)e.Parameter;
+                var uri = (Uri) e.Parameter;
                 var query = uri.Query;
                 if (!string.IsNullOrEmpty(query))
                 {
@@ -120,12 +120,20 @@ namespace InvalidPlayer.View
         private bool Core_PlaylistSegmentDetailUpdateEvent(string uniqueId, string opType, int curIndex, int totalCount,
             IPlaylistNetworkUpdateInfo info)
         {
-            if (uniqueId != _idWhenIqiyi) return false;
+            var refreshParser = _parser as IVideoRefresh;
+            if (null == refreshParser)
+            {
+                return true;
+            }
 
-            var header = IqiyiHelper.GetSignData();
-            info.SetRequestHeader("t", header.Item1);
-            info.SetRequestHeader("sign", header.Item2);
-            info.Url = IqiyiHelper.GetFullUrlAsync(info.Url).Result;
+            var detail = refreshParser.RefreshAsync(info.Url).Result;
+            var header = detail.Header;
+            foreach (var pair in header)
+            {
+                info.SetRequestHeader(pair.Key, pair.Value);
+            }
+
+            info.Url = detail.Url;
             return true;
         }
 
@@ -202,13 +210,15 @@ namespace InvalidPlayer.View
                 MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
                 MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
             PlayInfo.Text = string.Format(PlayInfoStr,
-                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
-                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
+                (int) MainPlayer.ActualWidth, (int) MainPlayer.ActualHeight,
+                MainPlayer.BufferingProgress*100, (MainPlayer.DownloadProgress*100).ToString("F"),
                 MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
             MediaElemInfo.Text = string.Format(ElemInfoStr,
                 MainPlayer.AutoPlay, MainPlayer.IsLooping,
                 MainPlayer.DefaultPlaybackRate, MainPlayer.Stretch);
         }
+
+        private IVideoParser _parser;
 
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
         {
@@ -229,8 +239,8 @@ namespace InvalidPlayer.View
 
             try
             {
-                var parser = _videoParser.GetParser(url);
-                var videos = await parser.ParseAsync(url);
+                _parser = _videoParser.GetParser(url);
+                var videos = await _parser.ParseAsync(url);
                 if (videos.Count > 1)
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);
@@ -244,12 +254,9 @@ namespace InvalidPlayer.View
                     plist.NetworkConfigs = cfgs;
                     foreach (var video in videos)
                     {
-                        plist.Append(video.Url, video.Size, (float)video.Seconds);
+                        plist.Append(video.Url, video.Size, (float) video.Seconds);
                     }
-                    if (parser is IqiyiParser)
-                    {
-                        _idWhenIqiyi = cfgs.UniqueId;
-                    }
+
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
                 }
