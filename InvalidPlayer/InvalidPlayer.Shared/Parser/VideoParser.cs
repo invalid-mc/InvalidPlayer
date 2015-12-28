@@ -54,22 +54,12 @@ namespace InvalidPlayer.Parser
 
         private void InitParser()
         {
-            var assembly = GetType().GetTypeInfo().Assembly;
-
-            var parserTypes = assembly.DefinedTypes.Where(item => typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item) && !item.IsInterface && item.AsType() != typeof (VideoParser));
-
-            AddParsers(parserTypes);
-
-            assembly = typeof (Info).GetTypeInfo().Assembly;
-
-            parserTypes = assembly.DefinedTypes.Where(item => typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item));
-
-            AddParsers(parserTypes);
-
             //仅测试用
-            var blibili=StaticContainer.GetBean<BiliBiliParser>();
-            _parsers.Remove(blibili.Name);
-            _parsers.Add(blibili.Name, blibili);
+            var parsers = StaticContainer.GetBeansOfType<IVideoParser>();
+            foreach (var kv in parsers)
+            {
+                _parsers.Add(kv.Value.Name, kv.Value);
+            }
         }
 
         private void AddParsers(IEnumerable<TypeInfo> parserTypes)

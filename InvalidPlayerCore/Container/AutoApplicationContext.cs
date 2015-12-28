@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,11 +141,18 @@ namespace InvalidPlayerCore.Container
                     continue;
                 }
 
+                var requiredBeanType = fieldInfo.FieldType;
+
                 var requiredBeanName = injectAttribute.Name;
 
                 if (string.IsNullOrEmpty(requiredBeanName))
                 {
-                    requiredBeanName = fieldInfo.FieldType.FullName;
+                    var names = TypeBeanNameCache[requiredBeanType];
+                    if (names.Count>1)
+                    {
+                        throw new ServiceException(string.Format("there are more beans of type {0}", requiredBeanType.FullName));
+                    }
+                    requiredBeanName = names.First();
                 }
 
                 if (!BeanDescriptionCache.ContainsKey(requiredBeanName))

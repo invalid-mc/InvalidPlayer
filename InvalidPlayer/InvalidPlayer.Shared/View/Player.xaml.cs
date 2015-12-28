@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
 using InvalidPlayer.Parser.Iqiyi;
+using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
@@ -25,13 +26,13 @@ namespace InvalidPlayer.View
     public sealed partial class Player : Page
     {
         private string _idWhenIqiyi = string.Empty;
-        private readonly IVideoParserDispatcher _videoParser;
+
+        [Inject] private IVideoParserDispatcher _videoParser;
 
         public Player()
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-            _videoParser = new VideoParser();
 
             this.Loaded += delegate
             {
@@ -44,6 +45,10 @@ namespace InvalidPlayer.View
                 Window.Current.CoreWindow.KeyUp -= CoreWindow_KeyUp;
             };
             this.SizeChanged += delegate { UpdateInfo(); };
+
+            SYEngineCore.Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
+
+            StaticContainer.AutoInject(this);
         }
 
         private void CoreWindow_KeyDown(CoreWindow sender, KeyEventArgs e)
@@ -81,8 +86,6 @@ namespace InvalidPlayer.View
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            SYEngineCore.Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
-
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
             if (e.Parameter is Uri)
             {
@@ -126,7 +129,13 @@ namespace InvalidPlayer.View
                 return true;
             }
 
-            var detail = refreshParser.RefreshAsync(info.Url).Result;
+            if (null == _videos || _videos.Count - 1 > totalCount || _videos.Count <= curIndex)
+            {
+                return false;
+            }
+
+            var url = _videos[curIndex].Url;
+            var detail = refreshParser.RefreshAsync(url).Result;
             var header = detail.Header;
             foreach (var pair in header)
             {
@@ -220,6 +229,8 @@ namespace InvalidPlayer.View
 
         private IVideoParser _parser;
 
+        private List<VideoItem> _videos;
+
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var url = WebUrlTextBox.Text;
@@ -232,16 +243,12 @@ namespace InvalidPlayer.View
         private async Task Play(string url)
         {
             DisplayRequestUtil.RequestActive();
-            if (MainPlayer.CurrentState == MediaElementState.Playing)
-            {
-                MainPlayer.Stop();
-            }
 
             try
             {
                 _parser = _videoParser.GetParser(url);
-                var videos = await _parser.ParseAsync(url);
-                if (videos.Count > 1)
+                _videos = await _parser.ParseAsync(url);
+                if (_videos.Count > 1)
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);
                     var cfgs = default(PlaylistNetworkConfigs);
@@ -252,7 +259,7 @@ namespace InvalidPlayer.View
                     cfgs.HttpReferer = string.Empty;
                     cfgs.HttpCookie = string.Empty;
                     plist.NetworkConfigs = cfgs;
-                    foreach (var video in videos)
+                    foreach (var video in _videos)
                     {
                         plist.Append(video.Url, video.Size, (float) video.Seconds);
                     }
@@ -260,9 +267,9 @@ namespace InvalidPlayer.View
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
                 }
-                else if (videos.Count == 1)
+                else if (_videos.Count == 1)
                 {
-                    MainPlayer.Source = new Uri(videos[0].Url);
+                    MainPlayer.Source = new Uri(_videos[0].Url);
                 }
             }
             catch (Exception exception)
