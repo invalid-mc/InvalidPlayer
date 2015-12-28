@@ -63,7 +63,8 @@
     <Compile Include="Exceptions\AppExceptionHandle.cs" />
     <Compile Include="Exceptions\ExceptionHandlingSynchronizationContext.cs" />
     <Compile Include="Exceptions\ServiceException.cs" />
-     <Compile Include="Service\HttpClientService.cs" />
+    <Compile Include="Service\DisplayRequestUtil.cs" />
+    <Compile Include="Service\HttpClientService.cs" />
     <Compile Include="Service\Log.cs" />
     <Compile Include="Service\SecurityKit.cs" />
   </ItemGroup>

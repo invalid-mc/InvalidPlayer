@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using InvalidPlayer.Service.Exceptions;
+using InvalidPlayerCore.Exceptions;
 
 //
 //YUKI FOREVER
