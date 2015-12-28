@@ -4,7 +4,7 @@ namespace InvalidPlayerCore.Exceptions
 {
     public class ServiceException : Exception
     {
-        public int ExceptionType { get; set; }=-1;
+        public int ExceptionType { get; set; }
 
         public ServiceException(int type) 
         {

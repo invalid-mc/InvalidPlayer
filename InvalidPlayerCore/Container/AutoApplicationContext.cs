@@ -57,7 +57,7 @@ namespace InvalidPlayerCore.Container
 
             if (BeanDescriptionCache.ContainsKey(name))
             {
-                throw new AppException($"已经包含name为{name}的Bean!");
+                throw new AppException(string.Format("已经包含name为{0}的Bean!",name));
             }
 
             var beanDesc = new BeanDescription();
@@ -126,6 +126,8 @@ namespace InvalidPlayerCore.Container
             CompleteBean("", obj.GetType(), obj);
         }
 
+
+
         //TODO 多线程
         public void CompleteBean(string name, Type type, object beanIns)
         {
@@ -147,7 +149,7 @@ namespace InvalidPlayerCore.Container
 
                 if (!BeanDescriptionCache.ContainsKey(requiredBeanName))
                 {
-                    throw new ServiceException($"can find required bean, required name is{requiredBeanName},current bean is {name}");
+                    throw new ServiceException(string.Format("can find required bean, required name is{0},current bean is {1}", requiredBeanName, name));
                 }
 
                 var requiredBeanIns = MakeBean(requiredBeanName);
@@ -180,7 +182,7 @@ namespace InvalidPlayerCore.Container
 
             if (null == beanIns)
             {
-                throw new ServiceException($"cannot create instance of type {beanType},name:{name}");
+                throw new ServiceException(String.Format("cannot create instance of type {0},name:{1}", beanType, name));
             }
 
             return beanIns;
@@ -232,7 +234,7 @@ namespace InvalidPlayerCore.Container
                 var names = TypeBeanNameCache[type];
                 if (names.Count > 1)
                 {
-                    throw new ServiceException($"指定类型含有多种类型Bean定义,请指定name");
+                    throw new ServiceException("指定类型含有多种类型Bean定义,请指定name");
                 }
                 return (T) MakeBean(names.First());
             }
@@ -243,7 +245,7 @@ namespace InvalidPlayerCore.Container
             var types = BeanNameTypeCache[name];
             if (!types.Contains(typeof (T)))
             {
-                throw new ServiceException($"没有符合指定类型和name的bean");
+                throw new ServiceException("没有符合指定类型和name的bean");
             }
             return (T) MakeBean(name);
         }
