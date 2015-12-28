@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
 using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Service;
 using SYEngineCore;
 
 namespace InvalidPlayer.View
@@ -114,6 +115,7 @@ namespace InvalidPlayer.View
         {
             base.OnNavigatedFrom(e);
             SetInfoVisible(false);
+            DisplayRequestUtil.RequestRelease();
         }
 
         private void player_BufferingProgressChanged(object sender, RoutedEventArgs e)
@@ -196,6 +198,7 @@ namespace InvalidPlayer.View
 
         private async Task Play(string url)
         {
+            DisplayRequestUtil.RequestActive();
             if (MainPlayer.CurrentState == MediaElementState.Playing)
             {
                 MainPlayer.Stop();
@@ -229,7 +232,7 @@ namespace InvalidPlayer.View
             }
             catch (Exception exception)
             {
-                new MessageDialog(exception.Message).ShowAsync();
+                var t=new MessageDialog(exception.Message).ShowAsync();
             }
         }
     }
