@@ -145,8 +145,9 @@ namespace InvalidPlayer.View
                 }
                 info.Url = detail.Url;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                ShowExceptionMessage(e.Message);
                 return false;
             }
 
@@ -281,8 +282,13 @@ namespace InvalidPlayer.View
             }
             catch (Exception exception)
             {
-                var t = new MessageDialog(exception.Message).ShowAsync();
+                ShowExceptionMessage(exception.Message);
             }
+        }
+
+        private void ShowExceptionMessage(string message)
+        {
+            var t = new MessageDialog(message).ShowAsync();
         }
     }
 }
