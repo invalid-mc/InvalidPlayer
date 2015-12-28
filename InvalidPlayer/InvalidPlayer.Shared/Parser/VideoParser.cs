@@ -5,13 +5,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 using InvalidPlayerParser;
+using InvalidPlayerParser.Parser.BiliBili;
 
 namespace InvalidPlayer.Parser
 {
+    [Singleton]
     public class VideoParser : IVideoParserDispatcher
     {
         private static readonly Regex NameRegex = new Regex("://[^.]*?.(\\w+).(com|tv)");
@@ -62,6 +65,11 @@ namespace InvalidPlayer.Parser
             parserTypes = assembly.DefinedTypes.Where(item => typeof (IVideoParser).GetTypeInfo().IsAssignableFrom(item));
 
             AddParsers(parserTypes);
+
+            //仅测试用
+            var blibili=StaticContainer.GetBean<BiliBiliParser>();
+            _parsers.Remove(blibili.Name);
+            _parsers.Add(blibili.Name, blibili);
         }
 
         private void AddParsers(IEnumerable<TypeInfo> parserTypes)

@@ -91,5 +91,31 @@ namespace InvalidPlayerCore.Service
 
             return result;
         }
+
+        public async Task<IInputStream> GetInputStreamAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+
+            if (!string.IsNullOrEmpty(cookie))
+            {
+                request.Headers.Cookie.ParseAdd(cookie);
+            }
+
+            foreach (var valuePair in headers)
+            {
+                request.Headers.Add(valuePair);
+            }
+
+            var response = await HttpClient.SendRequestAsync(request,HttpCompletionOption.ResponseHeadersRead);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var result = await response.Content.ReadAsInputStreamAsync();
+
+            return result;
+        }
     }
 }

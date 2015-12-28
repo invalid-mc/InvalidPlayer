@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using InvalidPlayer.View;
+using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Exceptions;
 using SYEngineCore;
 
@@ -25,6 +28,11 @@ namespace InvalidPlayer
         public void Init()
         {
             Task.Run(() => { Core.Initialize(); });
+            var list=new List<Assembly>();
+            list.Add(GetType().GetTypeInfo().Assembly);
+            list.Add(typeof (InvalidPlayerParser.Info).GetTypeInfo().Assembly);
+            list.Add(typeof(StaticContainer).GetTypeInfo().Assembly);
+            StaticContainer.Scan(list);
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
