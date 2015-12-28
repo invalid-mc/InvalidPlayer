@@ -25,9 +25,9 @@ namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        private string _idWhenIqiyi = string.Empty;
 
-        [Inject] private IVideoParserDispatcher _videoParser;
+        [Inject]
+        private IVideoParserDispatcher _videoParser;
 
         public Player()
         {
@@ -46,7 +46,7 @@ namespace InvalidPlayer.View
             };
             this.SizeChanged += delegate { UpdateInfo(); };
 
-            SYEngineCore.Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
+            Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
 
             StaticContainer.AutoInject(this);
         }
@@ -89,7 +89,7 @@ namespace InvalidPlayer.View
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
             if (e.Parameter is Uri)
             {
-                var uri = (Uri) e.Parameter;
+                var uri = (Uri)e.Parameter;
                 var query = uri.Query;
                 if (!string.IsNullOrEmpty(query))
                 {
@@ -126,7 +126,7 @@ namespace InvalidPlayer.View
             var refreshParser = _parser as IVideoRefresh;
             if (null == refreshParser)
             {
-                return true;
+                return false;
             }
 
             if (null == _videos || _videos.Count - 1 > totalCount || _videos.Count <= curIndex)
@@ -134,15 +134,22 @@ namespace InvalidPlayer.View
                 return false;
             }
 
-            var url = _videos[curIndex].Url;
-            var detail = refreshParser.RefreshAsync(url).Result;
-            var header = detail.Header;
-            foreach (var pair in header)
+            try
             {
-                info.SetRequestHeader(pair.Key, pair.Value);
+                var url = _videos[curIndex].Url;
+                var detail = refreshParser.RefreshAsync(url).Result;
+                var header = detail.Header;
+                foreach (var pair in header)
+                {
+                    info.SetRequestHeader(pair.Key, pair.Value);
+                }
+                info.Url = detail.Url;
+            }
+            catch (Exception)
+            {
+                return false;
             }
 
-            info.Url = detail.Url;
             return true;
         }
 
@@ -219,8 +226,8 @@ namespace InvalidPlayer.View
                 MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
                 MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
             PlayInfo.Text = string.Format(PlayInfoStr,
-                (int) MainPlayer.ActualWidth, (int) MainPlayer.ActualHeight,
-                MainPlayer.BufferingProgress*100, (MainPlayer.DownloadProgress*100).ToString("F"),
+                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
+                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
                 MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
             MediaElemInfo.Text = string.Format(ElemInfoStr,
                 MainPlayer.AutoPlay, MainPlayer.IsLooping,
@@ -261,7 +268,7 @@ namespace InvalidPlayer.View
                     plist.NetworkConfigs = cfgs;
                     foreach (var video in _videos)
                     {
-                        plist.Append(video.Url, video.Size, (float) video.Seconds);
+                        plist.Append(video.Url, video.Size, (float)video.Seconds);
                     }
 
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
