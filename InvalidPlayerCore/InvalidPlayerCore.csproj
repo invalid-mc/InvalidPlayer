@@ -41,6 +41,17 @@
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Container\IApplicationContext.cs" />
+    <Compile Include="Container\AutoApplicationContext.cs" />
+    <Compile Include="Container\BeanAttribute.cs" />
+    <Compile Include="Container\BeanDescription.cs" />
+    <Compile Include="Container\IBeanFactory.cs" />
+    <Compile Include="Container\IInstanceFactory.cs" />
+    <Compile Include="Container\InjectAttribute.cs" />
+    <Compile Include="Container\InstanceFactory.cs" />
+    <Compile Include="Container\PrototypeAttribute.cs" />
+    <Compile Include="Container\SingletonAttribute.cs" />
+    <Compile Include="Container\StaticContainer.cs" />
     <Compile Include="Model\VideoItem.cs" />
     <Compile Include="Parser\IVideoParser.cs" />
     <Compile Include="Parser\IVideoParserDispatcher.cs" />
@@ -52,6 +63,8 @@
     <Compile Include="Exceptions\AppExceptionHandle.cs" />
     <Compile Include="Exceptions\ExceptionHandlingSynchronizationContext.cs" />
     <Compile Include="Exceptions\ServiceException.cs" />
+    <Compile Include="Service\DisplayRequestUtil.cs" />
+    <Compile Include="Service\HttpClientService.cs" />
     <Compile Include="Service\Log.cs" />
     <Compile Include="Service\SecurityKit.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.System;
@@ -13,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
 using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Service;
 using SYEngineCore;
 
 namespace InvalidPlayer.View
@@ -37,10 +39,7 @@ namespace InvalidPlayer.View
                 Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
                 Window.Current.CoreWindow.KeyUp -= CoreWindow_KeyUp;
             };
-            this.SizeChanged += delegate
-            {
-                UpdateInfo();
-            };
+            this.SizeChanged += delegate { UpdateInfo(); };
         }
 
         private void CoreWindow_KeyDown(CoreWindow sender, KeyEventArgs e)
@@ -75,20 +74,36 @@ namespace InvalidPlayer.View
                 MainPlayer.IsFullWindow = false;
             }
         }
-        
+
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
             if (e.Parameter is Uri)
             {
-                var uri = (Uri)e.Parameter;
+                var uri = (Uri) e.Parameter;
                 var query = uri.Query;
                 if (!string.IsNullOrEmpty(query))
                 {
                     var form = new WwwFormUrlDecoder(query);
-                    var url = form.GetFirstValueByName("url");
+                    string url = "";
+                    string cookie = "";
+                    foreach (var item in form)
+                    {
+                        if (item.Name == "url")
+                        {
+                            url = item.Value;
+                        }
+                        else if (item.Name == "cookie")
+                        {
+                            cookie = item.Value;
+                        }
+                    }
                     if (!string.IsNullOrEmpty(url))
                     {
+                        if (!string.IsNullOrEmpty(cookie))
+                        {
+                            url += "#cookie=" + cookie;
+                        }
                         WebUrlTextBox.Text = url;
                         await Play(url);
                     }
@@ -100,6 +115,7 @@ namespace InvalidPlayer.View
         {
             base.OnNavigatedFrom(e);
             SetInfoVisible(false);
+            DisplayRequestUtil.RequestRelease();
         }
 
         private void player_BufferingProgressChanged(object sender, RoutedEventArgs e)
@@ -154,8 +170,8 @@ namespace InvalidPlayer.View
 
         private void UpdateInfo(bool force = false)
         {
-            if(!force && InfoPanel.Visibility== Visibility.Collapsed) return;
-            
+            if (!force && InfoPanel.Visibility == Visibility.Collapsed) return;
+
             VideoInfo.Text = string.Format(VideoInfoStr,
                 MainPlayer.NaturalVideoWidth, MainPlayer.NaturalVideoHeight,
                 MainPlayer.AspectRatioWidth, MainPlayer.AspectRatioHeight,
@@ -163,8 +179,8 @@ namespace InvalidPlayer.View
                 MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
                 MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
             PlayInfo.Text = string.Format(PlayInfoStr,
-                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
-                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
+                (int) MainPlayer.ActualWidth, (int) MainPlayer.ActualHeight,
+                MainPlayer.BufferingProgress*100, (MainPlayer.DownloadProgress*100).ToString("F"),
                 MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
             MediaElemInfo.Text = string.Format(ElemInfoStr,
                 MainPlayer.AutoPlay, MainPlayer.IsLooping,
@@ -182,6 +198,7 @@ namespace InvalidPlayer.View
 
         private async Task Play(string url)
         {
+            DisplayRequestUtil.RequestActive();
             if (MainPlayer.CurrentState == MediaElementState.Playing)
             {
                 MainPlayer.Stop();
@@ -203,7 +220,7 @@ namespace InvalidPlayer.View
                     plist.NetworkConfigs = cfgs;
                     foreach (var video in videos)
                     {
-                        plist.Append(video.Url, video.Size, (float)video.Seconds);
+                        plist.Append(video.Url, video.Size, (float) video.Seconds);
                     }
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
@@ -215,7 +232,7 @@ namespace InvalidPlayer.View
             }
             catch (Exception exception)
             {
-                new MessageDialog(exception.Message).ShowAsync();
+                var t=new MessageDialog(exception.Message).ShowAsync();
             }
         }
     }
