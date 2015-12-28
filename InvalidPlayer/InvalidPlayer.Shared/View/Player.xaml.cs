@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
+using InvalidPlayer.Parser.Iqiyi;
+using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 using SYEngineCore;
@@ -21,6 +24,7 @@ namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
+        private string _idWhenIqiyi = string.Empty;
         private readonly IVideoParserDispatcher _videoParser;
 
         public Player()
@@ -77,10 +81,12 @@ namespace InvalidPlayer.View
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            SYEngineCore.Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
+
             //weburl://?url=http://v.youku.com/v_show/id_XMTM1MTUzOTY1Ng==.html
             if (e.Parameter is Uri)
             {
-                var uri = (Uri) e.Parameter;
+                var uri = (Uri)e.Parameter;
                 var query = uri.Query;
                 if (!string.IsNullOrEmpty(query))
                 {
@@ -111,10 +117,23 @@ namespace InvalidPlayer.View
             }
         }
 
+        private bool Core_PlaylistSegmentDetailUpdateEvent(string uniqueId, string opType, int curIndex, int totalCount,
+            IPlaylistNetworkUpdateInfo info)
+        {
+            if (uniqueId != _idWhenIqiyi) return false;
+
+            var header = IqiyiHelper.GetSignData();
+            info.SetRequestHeader("t", header.Item1);
+            info.SetRequestHeader("sign", header.Item2);
+            info.Url = IqiyiHelper.GetFullUrlAsync(info.Url).Result;
+            return true;
+        }
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             SetInfoVisible(false);
+            Core.PlaylistSegmentDetailUpdateEvent -= Core_PlaylistSegmentDetailUpdateEvent;
             DisplayRequestUtil.RequestRelease();
         }
 
@@ -135,6 +154,8 @@ namespace InvalidPlayer.View
                 : Visibility.Visible;
         }
 
+        #region Format String
+
         private const string VideoInfoStr = "原始分辨率：{0} * {1}\n" +
                                             "视频纵横比：{2} * {3}\n" +
                                             "视频长度：{4}\n" +
@@ -154,6 +175,8 @@ namespace InvalidPlayer.View
                                            "重复播放：{1}\n" +
                                            "默认播放速率：{2}\n" +
                                            "视频拉伸方式：{3}\n";
+
+        #endregion
 
         private void SetInfoVisible(bool visible)
         {
@@ -179,8 +202,8 @@ namespace InvalidPlayer.View
                 MainPlayer.AudioStreamCount, MainPlayer.AudioStreamIndex,
                 MainPlayer.GetAudioStreamLanguage(MainPlayer.AudioStreamIndex), MainPlayer.Source);
             PlayInfo.Text = string.Format(PlayInfoStr,
-                (int) MainPlayer.ActualWidth, (int) MainPlayer.ActualHeight,
-                MainPlayer.BufferingProgress*100, (MainPlayer.DownloadProgress*100).ToString("F"),
+                (int)MainPlayer.ActualWidth, (int)MainPlayer.ActualHeight,
+                MainPlayer.BufferingProgress * 100, (MainPlayer.DownloadProgress * 100).ToString("F"),
                 MainPlayer.DownloadProgressOffset, MainPlayer.PlaybackRate);
             MediaElemInfo.Text = string.Format(ElemInfoStr,
                 MainPlayer.AutoPlay, MainPlayer.IsLooping,
@@ -206,7 +229,8 @@ namespace InvalidPlayer.View
 
             try
             {
-                var videos = await _videoParser.GetParser(url).ParseAsync(url);
+                var parser = _videoParser.GetParser(url);
+                var videos = await parser.ParseAsync(url);
                 if (videos.Count > 1)
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);
@@ -220,7 +244,11 @@ namespace InvalidPlayer.View
                     plist.NetworkConfigs = cfgs;
                     foreach (var video in videos)
                     {
-                        plist.Append(video.Url, video.Size, (float) video.Seconds);
+                        plist.Append(video.Url, video.Size, (float)video.Seconds);
+                    }
+                    if (parser is IqiyiParser)
+                    {
+                        _idWhenIqiyi = cfgs.UniqueId;
                     }
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
@@ -232,7 +260,7 @@ namespace InvalidPlayer.View
             }
             catch (Exception exception)
             {
-                var t=new MessageDialog(exception.Message).ShowAsync();
+                var t = new MessageDialog(exception.Message).ShowAsync();
             }
         }
     }
