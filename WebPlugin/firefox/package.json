@@ -1,6 +1,6 @@
 {
   "title": "InvalidPlayer",
-  "name": "InvalidPlayer",
+  "name": "invalid_player",
   "version": "0.0.1",
   "description": "InvalidPlayer",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "MIT",
+  "license": "NO",
   "keywords": [
     "jetpack"
   ]
