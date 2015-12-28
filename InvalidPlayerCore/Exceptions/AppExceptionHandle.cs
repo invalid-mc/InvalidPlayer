@@ -1,8 +1,9 @@
 ﻿using System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using InvalidPlayerCore.Service;
 
-namespace InvalidPlayer.Service.Exceptions
+namespace InvalidPlayerCore.Exceptions
 {
     public class AppExceptionHandle
     {

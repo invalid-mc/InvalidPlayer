@@ -5,7 +5,7 @@ using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 using Buffer = Windows.Storage.Streams.Buffer;
 
-namespace InvalidPlayer.Service
+namespace InvalidPlayerCore.Service
 {
     public class SecurityKit
     {
@@ -49,7 +49,7 @@ namespace InvalidPlayer.Service
         {
             var hashAlgorithmProvider = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5);
             var hash = hashAlgorithmProvider.CreateHash();
-            uint size = 1024*64;
+            uint size = 1024 * 64;
             var buffer = new Buffer(size);
             while (true)
             {

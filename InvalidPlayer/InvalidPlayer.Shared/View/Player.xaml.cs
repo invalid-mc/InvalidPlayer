@@ -13,13 +13,14 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using InvalidPlayer.Parser;
+using InvalidPlayerCore.Parser;
 using SYEngineCore;
 
 namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        private readonly IVideoParser _videoParser;
+        private readonly IVideoParserDispatcher _videoParser;
 
         public Player()
         {
@@ -202,7 +203,7 @@ namespace InvalidPlayer.View
 
             try
             {
-                var videos = await _videoParser.ParseAsync(url);
+                var videos = await _videoParser.GetParser(url).ParseAsync(url);
                 if (videos.Count > 1)
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);

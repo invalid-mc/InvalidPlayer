@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InvalidPlayer.Service.Exceptions
+namespace InvalidPlayerCore.Exceptions
 {
     public class ServiceException : Exception
     {

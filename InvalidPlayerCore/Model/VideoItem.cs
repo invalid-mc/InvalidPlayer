@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace InvalidPlayer.Model
+﻿namespace InvalidPlayerCore.Model
 {
     public class VideoItem
     {
