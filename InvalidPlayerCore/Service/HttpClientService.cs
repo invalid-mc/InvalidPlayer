@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +23,7 @@ namespace InvalidPlayerCore.Service
             HttpClient = new HttpClient();
         }
 
-        public HttpClient HttpClient { get; private set; }
+        public HttpClient HttpClient { get; }
 
         public async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage message)
         {
@@ -117,9 +115,12 @@ namespace InvalidPlayerCore.Service
                 request.Headers.Cookie.ParseAdd(cookie);
             }
 
-            foreach (var valuePair in headers)
+            if (null != headers)
             {
-                request.Headers.Add(valuePair);
+                foreach (var valuePair in headers)
+                {
+                    request.Headers.Add(valuePair);
+                }
             }
 
             var response = await HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
