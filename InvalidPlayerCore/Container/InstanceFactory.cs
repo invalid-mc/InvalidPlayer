@@ -1,33 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 
 //
 //YUKI FOREVER
 //
 // 
+
 namespace InvalidPlayerCore.Container
 {
-
-
     public class ActivatorInstanceFactory : IInstanceFactory
     {
-        public object GetInstance(Type type)
+        public object GetInstance(Type beanType)
         {
-            return Activator.CreateInstance(type);
+            var info = beanType.GetTypeInfo();
+            if (info.IsGenericType)
+            {
+                var genericTypeArguments = info.GenericTypeArguments;
+                var constructed = typeof (List<>).MakeGenericType(genericTypeArguments);
+                return Activator.CreateInstance(constructed);
+            }
+            return Activator.CreateInstance(beanType);
         }
     }
 
 
-
     public class FuncInstanceFactory : IInstanceFactory
     {
-        private ConcurrentDictionary<Type, Func<object>> dicEx = new ConcurrentDictionary<Type, Func<object>>();
+        private readonly ConcurrentDictionary<Type, Func<object>> dicEx = new ConcurrentDictionary<Type, Func<object>>();
 
         public object GetInstance(Type type)
         {
@@ -37,16 +39,13 @@ namespace InvalidPlayerCore.Container
             {
                 return value();
             }
-            else
-            {
-                value = CreateNewFunc(type);
-                dicEx[type] = value;
-                return value();
-            }
+            value = CreateNewFunc(type);
+            dicEx[type] = value;
+            return value();
         }
 
 
-        static Func<object> CreateNewFunc(Type type)
+        private static Func<object> CreateNewFunc(Type type)
         {
             var newExp = Expression.New(type);
             var lambdaExp = Expression.Lambda<Func<object>>(newExp, null);
@@ -54,6 +53,4 @@ namespace InvalidPlayerCore.Container
             return func;
         }
     }
-
 }
-

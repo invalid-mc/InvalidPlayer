@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using InvalidPlayerCore.Exceptions;
 
 //
@@ -25,10 +24,12 @@ namespace InvalidPlayerCore.Container
 
         private readonly string _id;
 
+        private readonly IInstanceFactory _instanceFactory;
 
         public AutoApplicationContext()
         {
             _id = Guid.NewGuid().ToString("N");
+            _instanceFactory = new ActivatorInstanceFactory();
         }
 
         public AutoApplicationContext(string id)
@@ -57,7 +58,7 @@ namespace InvalidPlayerCore.Container
 
             if (BeanDescriptionCache.ContainsKey(name))
             {
-                throw new AppException(string.Format("已经包含name为{0}的Bean!",name));
+                throw new AppException(string.Format("已经包含name为{0}的Bean!", name));
             }
 
             var beanDesc = new BeanDescription();
@@ -66,6 +67,21 @@ namespace InvalidPlayerCore.Container
             beanDesc.IsPrototype = beanAttribute is PrototypeAttribute;
             beanDesc.IsSingleton = !beanDesc.IsPrototype;
             BeanDescriptionCache.Add(name, beanDesc);
+
+            var methods = typeInfo.DeclaredMethods;
+            foreach (var method in methods)
+            {
+                var init = method.GetCustomAttribute(typeof (InitAttribute));
+
+                if (init != null)
+                {
+                    if (method.IsAbstract)
+                    {
+                        throw new Exception("unsupport abstract init method");
+                    }
+                    beanDesc.Init = method;
+                }
+            }
 
             AddTypeNameCache(beanDesc.BeanType, name);
 
@@ -123,13 +139,12 @@ namespace InvalidPlayerCore.Container
 
         public void Inject(object obj)
         {
-            CompleteBean("", obj.GetType(), obj);
+            CompleteBean(null, obj.GetType(), obj);
         }
 
 
-
         //TODO 多线程
-        public void CompleteBean(string name, Type type, object beanIns)
+        public void CompleteBean(BeanDescription desc, Type type, object beanIns)
         {
             var pros = type.GetRuntimeFields();
             foreach (var fieldInfo in pros)
@@ -140,21 +155,66 @@ namespace InvalidPlayerCore.Container
                     continue;
                 }
 
-                var requiredBeanName = injectAttribute.Name;
+                var requiredBeanType = fieldInfo.FieldType;
+                var requiredBeanTypeInfo = requiredBeanType.GetTypeInfo();
+                if (requiredBeanTypeInfo.IsGenericTypeDefinition)
+                {
+                    throw new ServiceException(string.Format("unsupport type {0}", requiredBeanType.FullName));
+                }
+                if (requiredBeanTypeInfo.IsGenericType)
+                {
+                    var genericTypeArguments = requiredBeanTypeInfo.GenericTypeArguments;
+                    var listType = typeof (ICollection<>).MakeGenericType(genericTypeArguments);
 
+                    if (listType.GetTypeInfo().IsAssignableFrom(requiredBeanTypeInfo))
+                    {
+                        if (genericTypeArguments.Length > 1)
+                        {
+                            throw new Exception("unsupport genericTypeArguments.count >1");
+                        }
+                        var genericType = genericTypeArguments[0];
+                        var names = TypeBeanNameCache[genericType];
+                        var constructed = typeof (List<>).MakeGenericType(genericType);
+                        dynamic list = Activator.CreateInstance(constructed);
+                        foreach (var n in names)
+                        {
+                            dynamic bean = MakeBean(n);
+                            list.Add(bean);
+                        }
+                        fieldInfo.SetValue(beanIns, list);
+                        continue;
+                    }
+                    throw new ServiceException(string.Format("unsupport type {0}", requiredBeanType.FullName));
+                }
+
+                var requiredBeanName = injectAttribute.Name;
                 if (string.IsNullOrEmpty(requiredBeanName))
                 {
-                    requiredBeanName = fieldInfo.FieldType.FullName;
+                    var names = TypeBeanNameCache[requiredBeanType];
+                    if (names.Count > 1)
+                    {
+                        throw new ServiceException(string.Format("there are more beans of type {0}", requiredBeanType.FullName));
+                    }
+                    requiredBeanName = names.First();
                 }
 
                 if (!BeanDescriptionCache.ContainsKey(requiredBeanName))
                 {
-                    throw new ServiceException(string.Format("can find required bean, required name is{0},current bean is {1}", requiredBeanName, name));
+                    throw new ServiceException(string.Format("can find required bean, required name is{0},current bean is {1}", requiredBeanName, type.FullName));
                 }
 
                 var requiredBeanIns = MakeBean(requiredBeanName);
 
                 fieldInfo.SetValue(beanIns, requiredBeanIns);
+            }
+
+            if (null != desc)
+            {
+                var init = desc.Init;
+                if (null != init)
+                {
+                    init.Invoke(beanIns, null);
+                }
             }
         }
 
@@ -166,26 +226,31 @@ namespace InvalidPlayerCore.Container
             var beanType = beanDesc.BeanType;
             if (beanDesc.IsPrototype)
             {
-                beanIns = Activator.CreateInstance(beanType);
-                CompleteBean(name, beanType, beanIns);
+                beanIns = CreateBean(beanType);
+                CompleteBean(beanDesc, beanType, beanIns);
             }
             else
             {
                 BeanCache.TryGetValue(name, out beanIns);
                 if (null == beanIns)
                 {
-                    beanIns = Activator.CreateInstance(beanType);
+                    beanIns = CreateBean(beanType);
                     beanIns = AddBeanToCache(name, beanIns);
-                    CompleteBean(name, beanType, beanIns);
+                    CompleteBean(beanDesc, beanType, beanIns);
                 }
             }
 
             if (null == beanIns)
             {
-                throw new ServiceException(String.Format("cannot create instance of type {0},name:{1}", beanType, name));
+                throw new ServiceException(string.Format("cannot create instance of type {0},name:{1}", beanType, name));
             }
 
             return beanIns;
+        }
+
+        private object CreateBean(Type beanType)
+        {
+            return _instanceFactory.GetInstance(beanType);
         }
 
         private object AddBeanToCache(string name, object beanIns)
@@ -201,7 +266,7 @@ namespace InvalidPlayerCore.Container
         }
 
         /// <summary>
-        /// just new
+        ///     just new
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -279,7 +344,7 @@ namespace InvalidPlayerCore.Container
             var names = TypeBeanNameCache[type];
             if (names.Count > 0)
             {
-                Dictionary<string, T> result = new Dictionary<string, T>(names.Count);
+                var result = new Dictionary<string, T>(names.Count);
                 foreach (var name in names)
                 {
                     var ins = (T) MakeBean(name);

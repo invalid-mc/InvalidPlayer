@@ -38,19 +38,28 @@
                 Margin="12,8,3,8" Text="http://www.iqiyi.com/a_19rrhawglx.html"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 TextWrapping="NoWrap" InputScope="Url" />
+            <StackPanel Orientation="Horizontal"  Grid.Column="1">
             <Button
-                x:Name="SearchBtn" Margin="3,0,12,0"
+                x:Name="SearchBtn" Margin="3,0,3,0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Grid.Column="1" Content="Play"
+                Content="Play"
                 Click="YoukuBtn_OnClick"
                 Style="{StaticResource NoBorderButtonStyle}" />
+
+            <Button
+                x:Name="AboutBtn" Margin="3,0,12,0"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Content="?"
+                Click="AboutBtn_OnClick"
+                Style="{StaticResource NoBorderButtonStyle}" />
+            </StackPanel>
         </Grid>
 
-        <StackPanel x:Name="InfoPanel" Margin="24,48" Visibility="Collapsed">
+        <StackPanel x:Name="InfoPanel" Margin="0,48"  Visibility="Collapsed" Background="#66000000">
             <StackPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="FontSize" Value="18"/>
-                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="Margin" Value="24,2"/>
                 </Style>
             </StackPanel.Resources>
             <TextBlock Text="视频信息" FontSize="23"/>
@@ -60,5 +69,10 @@
             <TextBlock Text="~播放器信息" FontSize="23"/>
             <TextBlock x:Name="MediaElemInfo"/>
         </StackPanel>
+
+        <Border x:Name="ProgressInfo" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="4" Margin="2,45" Visibility="Collapsed"  Background="#66000000">
+            <TextBlock x:Name="ProgressInfoText" FontSize="18">
+            </TextBlock>
+        </Border>
     </Grid>
 </Page>

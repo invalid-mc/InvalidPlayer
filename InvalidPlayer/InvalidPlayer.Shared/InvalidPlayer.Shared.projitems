@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\PlayerInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Theme\Styles.xaml">

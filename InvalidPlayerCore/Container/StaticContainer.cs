@@ -17,6 +17,11 @@ namespace InvalidPlayerCore.Container
             return _context.GetBean<T>();
         }
 
+        public static Dictionary<string, T> GetBeansOfType<T>()
+        {
+            return _context.GetBeansOfType<T>();
+        }
+
         public static void Scan(List<Assembly> assemblies)
         {
             lock (Locker)
