@@ -10,6 +10,8 @@ using Windows.Storage.Streams;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using InvalidPlayerCore.Container;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace InvalidPlayerCore.Service
 {
@@ -19,7 +21,7 @@ namespace InvalidPlayerCore.Service
         public HttpClientService()
         {
             var filter = new HttpBaseProtocolFilter();
-            filter.CacheControl.WriteBehavior=HttpCacheWriteBehavior.NoCache;
+            filter.CacheControl.WriteBehavior = HttpCacheWriteBehavior.NoCache;
             HttpClient = new HttpClient();
         }
 
@@ -40,13 +42,79 @@ namespace InvalidPlayerCore.Service
             return await HttpClient.GetStringAsync(new Uri(url));
         }
 
-        public async Task<string> GetStringAsync(string url, IEnumerable<KeyValuePair<string, string>> headers,string cookie=null)
+        public async Task<JToken> GetJsonAsync(string url)
+        {
+            return await GetJsonAsync(url, null, null);
+        }
+
+        public async Task<T> GetJsonDeserializeObjectAsync<T>(string url)
+        {
+            return await GetJsonDeserializeObjectAsync<T>(url, null, null);
+        }
+
+        public async Task<T> GetJsonDeserializeObjectAsync<T>(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
+        {
+            var result = default(T);
+            var content = await GetAsync(url, headers, cookie);
+            if (content != null)
+            {
+                using (var s = (await content.ReadAsInputStreamAsync()).AsStreamForRead())
+                using (var sr = new StreamReader(s))
+                using (var reader = new JsonTextReader(sr))
+                {
+                    var serializer = new JsonSerializer();
+                    result = serializer.Deserialize<T>(reader);
+                }
+            }
+            return result;
+        }
+
+        public async Task<JToken> GetJsonAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
+        {
+            JToken result = null;
+            var content = await GetAsync(url, headers, cookie);
+            if (content != null)
+            {
+                using (var s = (await content.ReadAsInputStreamAsync()).AsStreamForRead())
+                using (var sr = new StreamReader(s))
+                using (var reader = new JsonTextReader(sr))
+                {
+                    result = JToken.ReadFrom(reader);
+                }
+            }
+            return result;
+        }
+
+        public async Task<string> GetStringAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
+        {
+            var content = await GetAsync(url, headers, cookie);
+            if (null == content)
+            {
+                return null;
+            }
+            var result = await content.ReadAsStringAsync();
+            return result;
+        }
+
+
+        public async Task<IInputStream> GetInputStreamAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
+        {
+            var content = await GetAsync(url, headers, cookie);
+            if (null == content)
+            {
+                return null;
+            }
+            var result = await content.ReadAsInputStreamAsync();
+            return result;
+        }
+
+        public async Task<IHttpContent> GetAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
 
             if (!string.IsNullOrEmpty(cookie))
             {
-                 request.Headers.Cookie.ParseAdd(cookie);
+                request.Headers.Cookie.ParseAdd(cookie);
             }
 
             foreach (var valuePair in headers)
@@ -54,17 +122,18 @@ namespace InvalidPlayerCore.Service
                 request.Headers.Add(valuePair);
             }
 
-            var response = await HttpClient.SendRequestAsync(request);
+            var response = await HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var result = await response.Content.ReadAsStringAsync();
+            var result = response.Content;
 
             return result;
         }
+
 
         public async Task<string> GetStringAsync(string url, Encoding encoding)
         {
@@ -88,32 +157,6 @@ namespace InvalidPlayerCore.Service
             {
                 result = await reader.ReadToEndAsync();
             }
-
-            return result;
-        }
-
-        public async Task<IInputStream> GetInputStreamAsync(string url, IEnumerable<KeyValuePair<string, string>> headers, string cookie = null)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
-
-            if (!string.IsNullOrEmpty(cookie))
-            {
-                request.Headers.Cookie.ParseAdd(cookie);
-            }
-
-            foreach (var valuePair in headers)
-            {
-                request.Headers.Add(valuePair);
-            }
-
-            var response = await HttpClient.SendRequestAsync(request,HttpCompletionOption.ResponseHeadersRead);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            var result = await response.Content.ReadAsInputStreamAsync();
 
             return result;
         }
