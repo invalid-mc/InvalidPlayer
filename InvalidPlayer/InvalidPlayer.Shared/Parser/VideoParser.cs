@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
-using InvalidPlayerParser;
-using InvalidPlayerParser.Parser.BiliBili;
 
 namespace InvalidPlayer.Parser
 {
@@ -19,19 +13,12 @@ namespace InvalidPlayer.Parser
     {
         private static readonly Regex NameRegex = new Regex("://[^.]*?.(\\w+).(com|tv)");
         private readonly Dictionary<string, IVideoParser> _parsers;
-        
+
+        [Inject] private List<IVideoParser> _parserList;
+
         public VideoParser()
         {
             _parsers = new Dictionary<string, IVideoParser>(10);
-            InitParser();
-        }
-
-        public async Task<List<VideoItem>> ParseAsync(string url)
-        {
-            var parser = GetParser(url.ToLower());
-            AssertUtil.NotNull(parser, "unsupport url");
-
-            return await parser.ParseAsync(url);
         }
 
         public IVideoParser GetParser(string url)
@@ -44,6 +31,14 @@ namespace InvalidPlayer.Parser
             return null;
         }
 
+        public async Task<List<VideoItem>> ParseAsync(string url)
+        {
+            var parser = GetParser(url.ToLower());
+            AssertUtil.NotNull(parser, "unsupport url");
+
+            return await parser.ParseAsync(url);
+        }
+
 
         private string GetName(string url)
         {
@@ -51,24 +46,12 @@ namespace InvalidPlayer.Parser
             return match.Groups[1].ToString();
         }
 
-
+        [Init]
         private void InitParser()
         {
-            //仅测试用
-            var parsers = StaticContainer.GetBeansOfType<IVideoParser>();
-            foreach (var kv in parsers)
+            foreach (var parser in _parserList)
             {
-                _parsers.Add(kv.Value.Name, kv.Value);
-            }
-        }
-
-        private void AddParsers(IEnumerable<TypeInfo> parserTypes)
-        {
-            foreach (var type in parserTypes)
-            {
-                Debug.WriteLine(type);
-                var instance = Activator.CreateInstance(type.AsType()) as IVideoParser;
-                _parsers.Add(instance.Name, instance);
+                _parsers.Add(parser.Name, parser);
             }
         }
     }
