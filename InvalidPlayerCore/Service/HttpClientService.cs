@@ -117,9 +117,12 @@ namespace InvalidPlayerCore.Service
                 request.Headers.Cookie.ParseAdd(cookie);
             }
 
-            foreach (var valuePair in headers)
+            if (headers != null)
             {
-                request.Headers.Add(valuePair);
+                foreach (var valuePair in headers)
+                {
+                    request.Headers.Add(valuePair);
+                }
             }
 
             var response = await HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
