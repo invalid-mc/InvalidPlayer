@@ -24,7 +24,7 @@ namespace InvalidPlayerCore.Service
             HttpClient = new HttpClient();
         }
 
-        public HttpClient HttpClient { get; private set; }
+        public HttpClient HttpClient { get; set; }
 
         public async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage message)
         {
@@ -62,7 +62,7 @@ namespace InvalidPlayerCore.Service
                 using (var reader = new JsonTextReader(sr))
                 {
 #if DEBUG
-                    var json=await sr.ReadToEndAsync();
+                    var json = await sr.ReadToEndAsync();
                     Debug.WriteLine(json);
                     result = JsonConvert.DeserializeObject<T>(json);
 #else
@@ -91,7 +91,6 @@ namespace InvalidPlayerCore.Service
 #else
                     result = JToken.ReadFrom(reader);
 #endif
-
                 }
             }
             return result;

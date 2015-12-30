@@ -76,7 +76,7 @@ namespace InvalidPlayerCore.Exceptions
             e.Handled = true;
             var ex = e.Exception;
             var message = ex.Message;
-            if (message.Contains("A task was canceled"))    //TODO 
+            if (message.Contains("A task was canceled")) //TODO 
             {
             }
             else

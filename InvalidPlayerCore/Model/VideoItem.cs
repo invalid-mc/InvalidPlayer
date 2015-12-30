@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InvalidPlayerCore.Model
+﻿namespace InvalidPlayerCore.Model
 {
     public class VideoItem
     {
@@ -12,7 +10,7 @@ namespace InvalidPlayerCore.Model
 
         public override string ToString()
         {
-            return String.Format("Url: {0}, Seconds: {1}, Size: {2}", Url, Seconds, Size);
+            return string.Format("Url: {0}, Seconds: {1}, Size: {2}", Url, Seconds, Size);
         }
     }
 }

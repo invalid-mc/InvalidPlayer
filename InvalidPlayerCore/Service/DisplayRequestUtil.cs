@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.System.Display;
 
 namespace InvalidPlayerCore.Service
 {
-   public  static  class DisplayRequestUtil
+    public static class DisplayRequestUtil
     {
         private static DisplayRequest _displayRequest;
+
         public static void RequestActive()
         {
             try
@@ -20,11 +17,12 @@ namespace InvalidPlayerCore.Service
                     _displayRequest.RequestActive();
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 //
             }
         }
+
         public static void RequestRelease()
         {
             try

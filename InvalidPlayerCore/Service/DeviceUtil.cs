@@ -2,7 +2,7 @@
 
 namespace InvalidPlayerCore.Service
 {
-   public static class DeviceUtil
+    public static class DeviceUtil
     {
         public static string GetDeviceId()
         {

@@ -49,7 +49,7 @@ namespace InvalidPlayerCore.Service
         {
             var hashAlgorithmProvider = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5);
             var hash = hashAlgorithmProvider.CreateHash();
-            uint size = 1024 * 64;
+            uint size = 1024*64;
             var buffer = new Buffer(size);
             while (true)
             {
