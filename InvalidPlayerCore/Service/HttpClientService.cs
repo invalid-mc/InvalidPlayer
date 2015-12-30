@@ -24,7 +24,7 @@ namespace InvalidPlayerCore.Service
             HttpClient = new HttpClient();
         }
 
-        public HttpClient HttpClient { get; set; }
+        public HttpClient HttpClient { get; }
 
         public async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage message)
         {
