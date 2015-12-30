@@ -7,7 +7,7 @@ using InvalidPlayerCore.Model;
 
 namespace InvalidPlayerCore.Parser
 {
-     public  interface IVideoRefresh
+     public  interface IVideoRefreshSupport
     {
         Task<DetailVideoItem> RefreshAsync(string url);
     }
