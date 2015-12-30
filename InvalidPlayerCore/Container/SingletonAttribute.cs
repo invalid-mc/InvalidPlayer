@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-//
+﻿ //
 //YUKI FOREVER
 //
 // 
+
 namespace InvalidPlayerCore.Container
 {
-    public class SingletonAttribute:BeanAttribute
+    public class SingletonAttribute : BeanAttribute
     {
-        public SingletonAttribute():base()
+        public SingletonAttribute()
         {
         }
 
-        public SingletonAttribute(string name) :base(name)
+        public SingletonAttribute(string name) : base(name)
         {
-           
         }
     }
 }

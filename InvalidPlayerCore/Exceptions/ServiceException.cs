@@ -4,15 +4,13 @@ namespace InvalidPlayerCore.Exceptions
 {
     public class ServiceException : Exception
     {
-        public int ExceptionType { get; set; }
-
-        public ServiceException(int type) 
+        public ServiceException(int type)
         {
             ExceptionType = type;
         }
 
 
-        public ServiceException(int type,string message, Exception exception) : base(message, exception)
+        public ServiceException(int type, string message, Exception exception) : base(message, exception)
         {
             ExceptionType = type;
         }
@@ -30,6 +28,6 @@ namespace InvalidPlayerCore.Exceptions
         {
         }
 
-       
+        public int ExceptionType { get; set; }
     }
 }

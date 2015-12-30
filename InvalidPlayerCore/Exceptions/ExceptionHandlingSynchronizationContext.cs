@@ -109,10 +109,7 @@ namespace InvalidPlayerCore.Exceptions
                 return false;
             }
 
-            var exWrapper = new AysncUnhandledExceptionEventArgs
-            {
-                Exception = exception
-            };
+            var exWrapper = new AysncUnhandledExceptionEventArgs {Exception = exception};
 
             UnhandledException(this, exWrapper);
 

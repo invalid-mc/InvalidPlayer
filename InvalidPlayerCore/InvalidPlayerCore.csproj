@@ -54,11 +54,15 @@
     <Compile Include="Container\SingletonAttribute.cs" />
     <Compile Include="Container\StaticContainer.cs" />
     <Compile Include="Model\DetailVideoItem.cs" />
+    <Compile Include="Model\SubtitlesInfo.cs" />
+    <Compile Include="Model\VideoInfo.cs" />
     <Compile Include="Model\VideoItem.cs" />
+    <Compile Include="Parser\ISubtitlesSupport.cs" />
     <Compile Include="Parser\IVideoParser.cs" />
     <Compile Include="Parser\IVideoParserDispatcher.cs" />
-    <Compile Include="Parser\IVideoRefresh.cs" />
+    <Compile Include="Parser\IVideoRefreshSupport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AppService.cs" />
     <Compile Include="Service\AssertUtil.cs" />
     <Compile Include="Service\DeviceUtil.cs" />
     <Compile Include="Service\DispatcherHelper.cs" />

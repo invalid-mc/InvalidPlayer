@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InvalidPlayerCore.Container;
@@ -35,8 +36,9 @@ namespace InvalidPlayer.Parser
         {
             var parser = GetParser(url.ToLower());
             AssertUtil.NotNull(parser, "unsupport url");
-
-            return await parser.ParseAsync(url);
+            var result= await parser.ParseAsync(url);
+            Debug.WriteLine(result);
+            return result;
         }
 
 

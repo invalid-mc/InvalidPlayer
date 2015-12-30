@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -60,8 +61,14 @@ namespace InvalidPlayerCore.Service
                 using (var sr = new StreamReader(s))
                 using (var reader = new JsonTextReader(sr))
                 {
+#if DEBUG
+                    var json = await sr.ReadToEndAsync();
+                    Debug.WriteLine(json);
+                    result = JsonConvert.DeserializeObject<T>(json);
+#else
                     var serializer = new JsonSerializer();
                     result = serializer.Deserialize<T>(reader);
+#endif
                 }
             }
             return result;
@@ -77,7 +84,13 @@ namespace InvalidPlayerCore.Service
                 using (var sr = new StreamReader(s))
                 using (var reader = new JsonTextReader(sr))
                 {
+#if DEBUG
+                    var json = await sr.ReadToEndAsync();
+                    Debug.WriteLine(json);
+                    result = JToken.Parse(json);
+#else
                     result = JToken.ReadFrom(reader);
+#endif
                 }
             }
             return result;

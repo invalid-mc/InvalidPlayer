@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -17,10 +18,10 @@ namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        [Inject]
-        private IVideoParserDispatcher _videoParser;
-
         private IVideoParser _parser;
+
+        [Inject] private IVideoParserDispatcher _videoParser;
+
         private List<VideoItem> _videos;
 
         public Player()
@@ -30,7 +31,7 @@ namespace InvalidPlayer.View
             InitInfo();
             Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
             StaticContainer.AutoInject(this);
-            this.Unloaded += Player_Unloaded;
+            Unloaded += Player_Unloaded;
         }
 
         private void Player_Unloaded(object sender, RoutedEventArgs e)
@@ -87,14 +88,15 @@ namespace InvalidPlayer.View
             }
         }
 
-        private bool Core_PlaylistSegmentDetailUpdateEvent(string uniqueId, string opType, int curIndex, int totalCount,
-            IPlaylistNetworkUpdateInfo info)
+        private bool Core_PlaylistSegmentDetailUpdateEvent(string uniqueId, string opType, int curIndex, int totalCount, IPlaylistNetworkUpdateInfo info)
         {
-            var refreshParser = _parser as IVideoRefresh;
+            var refreshParser = _parser as IVideoRefreshSupport;
             if (null == refreshParser)
             {
                 return false;
             }
+
+            Debug.WriteLine("update url for index {0}", curIndex);
 
             if (null == _videos || _videos.Count - 1 > totalCount || _videos.Count <= curIndex)
             {
@@ -110,6 +112,7 @@ namespace InvalidPlayer.View
                 {
                     info.SetRequestHeader(pair.Key, pair.Value);
                 }
+                Debug.WriteLine("update url success \n form {0} \n to {1}", url, detail.Url);
                 info.Url = detail.Url;
             }
             catch (Exception e)
@@ -137,8 +140,7 @@ namespace InvalidPlayer.View
 
             try
             {
-                _parser = _videoParser.GetParser(url);
-                _videos = await _parser.ParseAsync(url);
+                await GetVideo(url);
                 if (_videos.Count > 1)
                 {
                     var plist = new Playlist(PlaylistTypes.NetworkHttp);
@@ -167,7 +169,21 @@ namespace InvalidPlayer.View
             {
                 ShowExceptionMessage(exception.Message);
             }
-        } 
+        }
+
+        private async Task GetVideo(string url)
+        {
+            _parser = _videoParser.GetParser(url);
+            AssertUtil.NotNull(_parser, "unsupport url");
+            _videos = await _parser.ParseAsync(url);
+            AssertUtil.NotNull(_videos, "no videos");
+#if DEBUG
+            foreach (var videoItem in _videos)
+            {
+                Debug.WriteLine(videoItem);
+            }
+#endif
+        }
 
         private void ShowExceptionMessage(string message)
         {
@@ -176,8 +192,6 @@ namespace InvalidPlayer.View
 
         private void AboutBtn_OnClick(object sender, RoutedEventArgs e)
         {
-
         }
-
     }
 }

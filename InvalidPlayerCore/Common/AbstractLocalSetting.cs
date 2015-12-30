@@ -13,7 +13,7 @@ namespace InvalidPlayerCore.Common
             var key = GetKey();
             if (string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException("key","key for localSettingsContainer is null");
+                throw new ArgumentNullException("key", "key for localSettingsContainer is null");
             }
             _container = _localSettings.CreateContainer(key, ApplicationDataCreateDisposition.Always);
         }
