@@ -10,10 +10,11 @@ chrome.runtime.onInstalled.addListener(function(){
 						pageUrl : { originAndPathMatches : "[^.]*\\.((hunantv)|(iqiyi)|(letv)|(sohu)|(tudou)|(youku)|(youtube))\\.(.*)" },
 						css : ["video"]
 					}),
-					// match chinese video website... only test embed element, flash?
+					// match chinese video website... only test --embed-- element, flash?
+                    // change --embed-- to object type. query flash... (for 271)
 					new chrome.declarativeContent.PageStateMatcher({
 						pageUrl : { originAndPathMatches : "[^.]*\\.((hunantv)|(iqiyi)|(letv)|(sohu)|(tudou)|(youku)|(youtube))\\.(.*)" },
-						css : ["embed"]
+						css : ["object"]
 					})
 				],
 				actions : [ new chrome.declarativeContent.ShowPageAction() ]
