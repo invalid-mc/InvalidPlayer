@@ -96,6 +96,8 @@ namespace InvalidPlayer.View
                 return false;
             }
 
+            Debug.WriteLine("update url for index {0}", curIndex);
+
             if (null == _videos || _videos.Count - 1 > totalCount || _videos.Count <= curIndex)
             {
                 return false;
@@ -110,6 +112,7 @@ namespace InvalidPlayer.View
                 {
                     info.SetRequestHeader(pair.Key, pair.Value);
                 }
+                Debug.WriteLine("update url success \n form {0} \n to {1}", url, detail.Url);
                 info.Url = detail.Url;
             }
             catch (Exception e)
