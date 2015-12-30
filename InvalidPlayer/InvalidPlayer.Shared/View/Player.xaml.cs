@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -156,7 +157,10 @@ namespace InvalidPlayer.View
                     {
                         plist.Append(video.Url, video.Size, (float) video.Seconds);
                     }
-
+#if DEBUG
+                    var debugFile = Path.Combine(ApplicationData.Current.TemporaryFolder.Path, "DebugFile.mkv");
+                    plist.SetDebugFile(debugFile);
+#endif
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
                 }
