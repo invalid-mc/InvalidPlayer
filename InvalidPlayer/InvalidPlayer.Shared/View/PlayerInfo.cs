@@ -18,14 +18,38 @@ namespace InvalidPlayer.View
             {
                 Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
                 Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
+
+#if WINDOWS_PHONE_APP
+                Windows.Phone.UI.Input.HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
+                Windows.Phone.UI.Input.HardwareButtons.CameraReleased += HardwareButtons_CameraReleased;
+#endif
             };
             this.Unloaded += delegate
             {
                 Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
                 Window.Current.CoreWindow.KeyUp -= CoreWindow_KeyUp;
+
+#if WINDOWS_PHONE_APP
+                Windows.Phone.UI.Input.HardwareButtons.CameraPressed -= HardwareButtons_CameraPressed;
+                Windows.Phone.UI.Input.HardwareButtons.CameraReleased -= HardwareButtons_CameraReleased;
+#endif
             };
             this.SizeChanged += delegate { UpdateInfo(); };
         }
+
+#if WINDOWS_PHONE_APP
+
+        private void HardwareButtons_CameraPressed(object sender, Windows.Phone.UI.Input.CameraEventArgs e)
+        {
+            SetInfoVisible(true);
+        }
+
+        private void HardwareButtons_CameraReleased(object sender, Windows.Phone.UI.Input.CameraEventArgs e)
+        {
+            SetInfoVisible(false);
+        }
+
+#endif
 
         private void CoreWindow_KeyDown(CoreWindow sender, KeyEventArgs e)
         {
@@ -118,7 +142,7 @@ namespace InvalidPlayer.View
 
         private void SetInfoVisible(bool visible)
         {
-            if (visible)
+            if (visible && MainPlayer.CurrentState != MediaElementState.Closed)
             {
                 InfoPanel.Visibility = Visibility.Visible;
                 UpdateInfo();
