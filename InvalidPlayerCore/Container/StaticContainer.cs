@@ -10,29 +10,46 @@ namespace InvalidPlayerCore.Container
 {
     public static class StaticContainer
     {
-        private static AutoApplicationContext _context;
+        /// <summary>
+        /// 提供延迟初始化
+        /// </summary>
+        private static class Provider
+        {
+            public static readonly AutoApplicationContext ContextProvider = new AutoApplicationContext();
+        }
+
+        private static AutoApplicationContext Context
+        {
+            get { return Provider.ContextProvider; }
+        }
 
         private static readonly object Locker = new object();
 
+        public static object GetBean(string name)
+        {
+            return Context.GetBean(name);
+        }
+
         public static T GetBean<T>()
         {
-            return _context.GetBean<T>();
+            return Context.GetBean<T>();
+        }
+
+        public static T GetBean<T>(string name)
+        {
+            return Context.GetBean<T>(name);
         }
 
         public static Dictionary<string, T> GetBeansOfType<T>()
         {
-            return _context.GetBeansOfType<T>();
+            return Context.GetBeansOfType<T>();
         }
 
         public static void Scan(List<Assembly> assemblies)
         {
             lock (Locker)
             {
-                if (null == _context)
-                {
-                    _context = new AutoApplicationContext();
-                }
-                _context.Scan(assemblies);
+                Context.Scan(assemblies);
             }
         }
 
@@ -44,7 +61,7 @@ namespace InvalidPlayerCore.Container
 
         public static void AutoInject(object ins)
         {
-            _context.Inject(ins);
+            Context.Inject(ins);
         }
     }
 }

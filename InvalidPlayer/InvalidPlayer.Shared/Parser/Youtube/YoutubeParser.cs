@@ -6,24 +6,22 @@ using Windows.Foundation;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Parser.Attributes;
 using InvalidPlayerCore.Service;
 
 namespace InvalidPlayer.Parser.Youtube
 {
     [Singleton]
     [WebUrlPattern(@"https?:/*[^/]+youtube.com[^\s]+")]
+    [HostNameMatch("youtube.com")]
     public class YoutubeParser : IVideoParser
     {
         public static readonly string Api = @"http://www.youtube.com/get_video_info?video_id={0}";
         private static readonly Regex VideoIdRegex = new Regex("v=([^&]+)");
 
-        [Inject] private HttpClientService _httpClientService;
-
-        public string Name
-        {
-            get { return "youtube"; }
-        }
-
+        [Inject]
+        private HttpClientService _httpClientService;
+        
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = GetVideoId(url);

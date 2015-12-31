@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InvalidPlayerCore.Parser
+namespace InvalidPlayerCore.Parser.Attributes
 {
     /// <summary>
     /// URL匹配正则
@@ -17,6 +13,6 @@ namespace InvalidPlayerCore.Parser
             Pattern = pattern;
         }
 
-        public string Pattern { get;private set; }
+        public string Pattern { get; private set; }
     }
 }

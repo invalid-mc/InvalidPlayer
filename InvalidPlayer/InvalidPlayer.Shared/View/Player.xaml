@@ -7,19 +7,19 @@
     mc:Ignorable="d">
 
     <Grid Margin="0">
-<!--        <Grid.RowDefinitions>-->
-<!--            <RowDefinition Height="*" />-->
-<!--            <RowDefinition Height="30" />-->
-<!--            <RowDefinition Height="45" />-->
-<!--            <RowDefinition Height="45" />-->
-<!--            <RowDefinition Height="5" />-->
-<!--        </Grid.RowDefinitions>-->
-<!--        <Grid.ColumnDefinitions>-->
-<!--            <ColumnDefinition Width="1*" />-->
-<!--            <ColumnDefinition Width="2*" />-->
-<!--        </Grid.ColumnDefinitions>-->
+        <!--        <Grid.RowDefinitions>-->
+        <!--            <RowDefinition Height="*" />-->
+        <!--            <RowDefinition Height="30" />-->
+        <!--            <RowDefinition Height="45" />-->
+        <!--            <RowDefinition Height="45" />-->
+        <!--            <RowDefinition Height="5" />-->
+        <!--        </Grid.RowDefinitions>-->
+        <!--        <Grid.ColumnDefinitions>-->
+        <!--            <ColumnDefinition Width="1*" />-->
+        <!--            <ColumnDefinition Width="2*" />-->
+        <!--        </Grid.ColumnDefinitions>-->
         <Rectangle Fill="DeepPink" />
-        
+
         <MediaElement
             x:Name="MainPlayer"
             HorizontalAlignment="Stretch" VerticalAlignment="Center"
@@ -39,19 +39,26 @@
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 TextWrapping="NoWrap" InputScope="Url" />
             <StackPanel Orientation="Horizontal"  Grid.Column="1">
-            <Button
-                x:Name="SearchBtn" Margin="3,0,3,0"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Content="Play"
-                Click="YoukuBtn_OnClick"
-                Style="{StaticResource NoBorderButtonStyle}" />
+                <Button
+                    x:Name="SearchBtn" Margin="3,0,3,0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    Content="Play"
+                    Click="YoukuBtn_OnClick"
+                    Style="{StaticResource NoBorderButtonStyle}" />
+                
+                <Button
+                    x:Name="LocalBtn" Margin="3,0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    Content="Local"
+                    Click="LocalBtn_OnClickBtn_OnClick"
+                    Style="{StaticResource NoBorderButtonStyle}" />
 
-            <Button
-                x:Name="AboutBtn" Margin="3,0,12,0"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Content="?"
-                Click="AboutBtn_OnClick"
-                Style="{StaticResource NoBorderButtonStyle}" />
+                <Button
+                    x:Name="AboutBtn" Margin="3,0,12,0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    Content="?"
+                    Click="AboutBtn_OnClick"
+                    Style="{StaticResource NoBorderButtonStyle}" />
             </StackPanel>
         </Grid>
 

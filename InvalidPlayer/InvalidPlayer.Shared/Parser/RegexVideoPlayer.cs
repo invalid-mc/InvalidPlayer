@@ -1,31 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Parser;
+using InvalidPlayerCore.Parser.Attributes;
 
 namespace InvalidPlayer.Parser
 {
-    [Singleton("RegexVideoParserDispatcher")]
-    public class VideoParserDispatcher : IVideoParserDispatcher
+    [Singleton("RegexVideoPlayer")]
+    public class RegexVideoPlayer : WebVideoPlayer
     {
-        [Inject] private List<IVideoParser> _parserList;
+        [Inject]
+        private List<IVideoParser> _parserList;
+
         private Dictionary<Regex, IVideoParser> _parsers;
 
-        public IVideoParser GetParser(string url)
+        private string _url;
+
+        public override string Url
+        {
+            get { return _url; }
+            set { SetCurrentParser(_url = value); }
+        }
+        
+        private void SetCurrentParser(string url)
         {
             Debug.WriteLine("weburl:{0}", url);
-            foreach (var entry in _parsers)
+            foreach (var entry in from entry in _parsers let regex = entry.Key where regex.IsMatch(url) select entry)
             {
-                var regex = entry.Key;
-                if (regex.IsMatch(url))
-                {
-                    Debug.WriteLine("support url,selected parser is :{0}", entry.Value);
-                    return entry.Value;
-                }
+                Debug.WriteLine("support url,selected parser is :{0}", entry.Value);
+                Parser = entry.Value;
+                break;
             }
-            return null;
         }
 
         [Init]

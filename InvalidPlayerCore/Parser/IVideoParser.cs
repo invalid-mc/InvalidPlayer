@@ -10,11 +10,6 @@ namespace InvalidPlayerCore.Parser
     public interface IVideoParser
     {
         /// <summary>
-        ///     Name标志
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     获取视频列表
         /// </summary>
         /// <param name="url">需要解析的URL</param>
