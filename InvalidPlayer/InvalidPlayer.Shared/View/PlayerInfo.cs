@@ -118,7 +118,7 @@ namespace InvalidPlayer.View
 
         private void SetInfoVisible(bool visible)
         {
-            if (visible && MainPlayer.Source != null)
+            if (visible)
             {
                 InfoPanel.Visibility = Visibility.Visible;
                 UpdateInfo();

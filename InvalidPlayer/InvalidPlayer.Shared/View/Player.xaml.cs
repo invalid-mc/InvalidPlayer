@@ -146,16 +146,26 @@ namespace InvalidPlayer.View
         {
         }
 
-        private void LocalBtn_OnClickBtn_OnClick(object sender, RoutedEventArgs e)
+        private async void LocalBtn_OnClickBtn_OnClick(object sender, RoutedEventArgs e)
         {
 #if WINDOWS_PHONE_APP
             new MessageDialog("Not Support now.").ShowAsync();
             return;
 #else
-            var filePicker = new FileOpenPicker();
-            filePicker.CommitButtonText = "播放";
-            filePicker.FileTypeFilter.Add("Video Files|*.mp4;*.mkv;*.flv");
-            filePicker.FileTypeFilter.Add("All Files|*.*");
+            var filePicker = new FileOpenPicker
+            {
+                CommitButtonText = "播放",
+                SuggestedStartLocation = PickerLocationId.VideosLibrary
+            };
+            filePicker.FileTypeFilter.Add(".mp4");
+            filePicker.FileTypeFilter.Add(".mkv");
+            filePicker.FileTypeFilter.Add(".flv");
+            var file = await filePicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(file);
+                await Play(file.Path);
+            }
 #endif
         }
     }
