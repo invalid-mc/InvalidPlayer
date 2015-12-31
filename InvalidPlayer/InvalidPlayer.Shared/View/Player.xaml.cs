@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
-using Windows.Storage.Pickers;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,16 +16,26 @@ using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 using SYEngineCore;
+#if WINDOWS_PHONE_APP
+using InvalidPlayer.Common;
+#endif
+
+#pragma warning disable 649
 
 namespace InvalidPlayer.View
 {
+#if WINDOWS_PHONE_APP
+    public sealed partial class Player : Page, IFileOpenPickerContinuable
+#else
     public sealed partial class Player : Page
+#endif
+
     {
         [Inject("SimpleVideoPlayerFactory")]
         private IVideoPlayerFactory _playerFactory;
 
         private IVideoPlayer _videoPlayer;
-        
+
         public Player()
         {
             InitializeComponent();
@@ -48,7 +59,7 @@ namespace InvalidPlayer.View
                 await OpenFromUri(uri);
             }
         }
-        
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
@@ -112,7 +123,7 @@ namespace InvalidPlayer.View
 
             return false;
         }
-        
+
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var url = WebUrlTextBox.Text;
@@ -136,7 +147,7 @@ namespace InvalidPlayer.View
                 ShowExceptionMessage(exception.Message);
             }
         }
-        
+
         private async void ShowExceptionMessage(string message)
         {
             await new MessageDialog(message).ShowAsync();
@@ -148,25 +159,35 @@ namespace InvalidPlayer.View
 
         private async void LocalBtn_OnClickBtn_OnClick(object sender, RoutedEventArgs e)
         {
-#if WINDOWS_PHONE_APP
-            new MessageDialog("Not Support now.").ShowAsync();
-            return;
-#else
-            var filePicker = new FileOpenPicker
-            {
-                CommitButtonText = "播放",
-                SuggestedStartLocation = PickerLocationId.VideosLibrary
-            };
+            var filePicker = new FileOpenPicker {CommitButtonText = "播放", SuggestedStartLocation = PickerLocationId.VideosLibrary};
             filePicker.FileTypeFilter.Add(".mp4");
             filePicker.FileTypeFilter.Add(".mkv");
             filePicker.FileTypeFilter.Add(".flv");
+
+#if WINDOWS_PHONE_APP
+            filePicker.PickSingleFileAndContinue();
+#else
+        
             var file = await filePicker.PickSingleFileAsync();
+            await PlayLocalFile(file);
+#endif
+        }
+
+#if WINDOWS_PHONE_APP
+        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
+        {
+            var file = args.Files.FirstOrDefault();
+            await PlayLocalFile(file);
+        }
+#endif
+
+        private async Task PlayLocalFile(StorageFile file)
+        {
             if (file != null)
             {
-                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(file);
+                StorageApplicationPermissions.FutureAccessList.Add(file);
                 await Play(file.Path);
             }
-#endif
         }
     }
 }

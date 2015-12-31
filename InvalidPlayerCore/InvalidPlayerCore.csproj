@@ -76,6 +76,7 @@
     <Compile Include="Service\DisplayRequestUtil.cs" />
     <Compile Include="Service\HttpClientService.cs" />
     <Compile Include="Service\Log.cs" />
+    <Compile Include="Service\RegexHelper.cs" />
     <Compile Include="Service\SecurityKit.cs" />
   </ItemGroup>
   <ItemGroup>
