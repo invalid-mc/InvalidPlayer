@@ -61,6 +61,7 @@
     <Compile Include="Parser\IVideoParser.cs" />
     <Compile Include="Parser\IVideoParserDispatcher.cs" />
     <Compile Include="Parser\IVideoRefreshSupport.cs" />
+    <Compile Include="Parser\WebUrlPatternAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AppService.cs" />
     <Compile Include="Service\AssertUtil.cs" />
