@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Web.Http;
+using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 
 namespace InvalidPlayer.Parser.Youtube
 {
+    [Singleton]
+    [WebUrlPattern(@"https?:/*[^/]+youtube.com[^\s]+")]
     public class YoutubeParser : IVideoParser
     {
         public static readonly string Api = @"http://www.youtube.com/get_video_info?video_id={0}";
         private static readonly Regex VideoIdRegex = new Regex("v=([^&]+)");
-        private readonly HttpClient _httpClient;
 
-        public YoutubeParser()
-        {
-            _httpClient = new HttpClient();
-        }
+        [Inject] private HttpClientService _httpClientService;
 
         public string Name
         {
@@ -30,10 +27,10 @@ namespace InvalidPlayer.Parser.Youtube
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = GetVideoId(url);
-            AssertUtil.HasText(id, "unsupport url");
+            AssertUtil.HasText(id, "no id");
 
             var query = string.Format(Api, id);
-            var result = await _httpClient.GetStringAsync(new Uri(query));
+            var result = await _httpClientService.GetStringAsync(query);
             AssertUtil.HasText(result, "no info from server");
 
             var form = new WwwFormUrlDecoder(result);

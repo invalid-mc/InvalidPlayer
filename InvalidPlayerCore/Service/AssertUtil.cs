@@ -1,4 +1,5 @@
 ﻿using System;
+using InvalidPlayerCore.Exceptions;
 
 namespace InvalidPlayerCore.Service
 {
@@ -8,7 +9,7 @@ namespace InvalidPlayerCore.Service
         {
             if (!expression)
             {
-                throw new Exception(message);
+                throw new ServiceException(message);
             }
         }
 
@@ -16,7 +17,7 @@ namespace InvalidPlayerCore.Service
         {
             if (param != null)
             {
-                throw new Exception(message);
+                throw new ServiceException(message);
             }
         }
 
@@ -24,7 +25,7 @@ namespace InvalidPlayerCore.Service
         {
             if (param == null)
             {
-                throw new Exception(message);
+                throw new ServiceException(message);
             }
         }
 
@@ -32,7 +33,7 @@ namespace InvalidPlayerCore.Service
         {
             if (string.IsNullOrEmpty(text))
             {
-                throw new Exception(message);
+                throw new ServiceException(message);
             }
         }
 
@@ -40,7 +41,7 @@ namespace InvalidPlayerCore.Service
         {
             if (null == array || array.Length < 1)
             {
-                throw new Exception(message);
+                throw new ServiceException(message);
             }
         }
     }

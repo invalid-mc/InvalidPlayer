@@ -9,13 +9,21 @@ using Windows.UI.Xaml.Controls;
 using InvalidPlayer.View;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Exceptions;
+using InvalidPlayerParser;
 using SYEngineCore;
+#if WINDOWS_PHONE_APP
+using InvalidPlayer.Common;
+#endif
 
 namespace InvalidPlayer
 {
     public sealed partial class App : Application
     {
         private readonly AppExceptionHandle _appExceptionHandle;
+
+#if WINDOWS_PHONE_APP
+        private ContinuationManager continuationManager;
+#endif
 
         public App()
         {
@@ -28,10 +36,10 @@ namespace InvalidPlayer
         public void Init()
         {
             Task.Run(() => { Core.Initialize(); });
-            var list=new List<Assembly>();
+            var list = new List<Assembly>();
             list.Add(GetType().GetTypeInfo().Assembly);
-            list.Add(typeof (InvalidPlayerParser.Info).GetTypeInfo().Assembly);
-            list.Add(typeof(StaticContainer).GetTypeInfo().Assembly);
+            list.Add(typeof (Info).GetTypeInfo().Assembly);
+            list.Add(typeof (StaticContainer).GetTypeInfo().Assembly);
             StaticContainer.Scan(list);
         }
 
@@ -60,6 +68,14 @@ namespace InvalidPlayer
                     BuildRootContent(rootFrame, null);
                 }
             }
+#if WINDOWS_PHONE_APP
+            else if (e is IContinuationActivatedEventArgs)
+            {
+                continuationManager = new ContinuationManager();
+                var continuationEventArgs = e as IContinuationActivatedEventArgs;
+                continuationManager.Continue(continuationEventArgs, rootFrame);
+            }
+#endif
             else
             {
                 BuildRootContent(rootFrame, null);

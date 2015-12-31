@@ -16,6 +16,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoParserDispatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>

@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage.Pickers;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,7 +22,8 @@ namespace InvalidPlayer.View
     {
         private IVideoParser _parser;
 
-        [Inject] private IVideoParserDispatcher _videoParser;
+        [Inject("RegexVideoParserDispatcher")]
+        private IVideoParserDispatcher _videoParser;
 
         private List<VideoItem> _videos;
 
@@ -157,7 +159,11 @@ namespace InvalidPlayer.View
                     {
                         plist.Append(video.Url, video.Size, (float) video.Seconds);
                     }
-
+#if DEBUG
+                    var debugFile = Path.Combine(ApplicationData.Current.TemporaryFolder.Path, "DebugFile.mkv");
+                    Debug.WriteLine(string.Format("DebugFile File:{0}", debugFile));
+                    plist.SetDebugFile(debugFile);
+#endif
                     var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
                     MainPlayer.Source = new Uri(s);
                 }
