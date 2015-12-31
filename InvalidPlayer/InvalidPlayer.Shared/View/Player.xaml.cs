@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -192,6 +193,19 @@ namespace InvalidPlayer.View
 
         private void AboutBtn_OnClick(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void LocalBtn_OnClickBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+#if WINDOWS_PHONE_APP
+            new MessageDialog("Not Support now.").ShowAsync();
+            return;
+#else
+            var filePicker = new FileOpenPicker();
+            filePicker.CommitButtonText = "播放";
+            filePicker.FileTypeFilter.Add("Video Files|*.mp4;*.mkv;*.flv");
+            filePicker.FileTypeFilter.Add("All Files|*.*");
+#endif
         }
     }
 }
