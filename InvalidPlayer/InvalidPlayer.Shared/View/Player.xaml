@@ -29,16 +29,22 @@
             CurrentStateChanged="player_CurrentStateChanged"/>
 
         <Grid x:Name="InputGrid" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <!-- If phone, change grid index with csharp code -->
             <TextBox
                 x:Name="WebUrlTextBox"
                 Margin="12,8,3,8" Text=""
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 TextWrapping="NoWrap" InputScope="Url" />
-            <StackPanel Orientation="Horizontal"  Grid.Column="1">
+            <!-- ReSharper disable once Xaml.MissingGridIndex -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <Button
                     x:Name="SearchBtn" Margin="3,0,3,0"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
