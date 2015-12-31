@@ -20,13 +20,11 @@ namespace InvalidPlayer.View
 {
     public sealed partial class Player : Page
     {
-        private IVideoParser _parser;
+        [Inject("SimpleVideoPlayerFactory")]
+        private IVideoPlayerFactory _playerFactory;
 
-        [Inject("RegexVideoParserDispatcher")]
-        private IVideoParserDispatcher _videoParser;
-
-        private List<VideoItem> _videos;
-
+        private IVideoPlayer _videoPlayer;
+        
         public Player()
         {
             InitializeComponent();
@@ -44,14 +42,13 @@ namespace InvalidPlayer.View
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is Uri)
+            var uri = e.Parameter as Uri;
+            if (uri != null)
             {
-                var uri = (Uri) e.Parameter;
                 await OpenFromUri(uri);
             }
         }
-
-
+        
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
@@ -93,41 +90,29 @@ namespace InvalidPlayer.View
 
         private bool Core_PlaylistSegmentDetailUpdateEvent(string uniqueId, string opType, int curIndex, int totalCount, IPlaylistNetworkUpdateInfo info)
         {
-            var refreshParser = _parser as IVideoRefreshSupport;
-            if (null == refreshParser)
-            {
-                return false;
-            }
-
-            Debug.WriteLine("update url for index {0}", curIndex);
-
-            if (null == _videos || _videos.Count - 1 > totalCount || _videos.Count <= curIndex)
-            {
-                return false;
-            }
-
             try
             {
-                var url = _videos[curIndex].Url;
-                var detail = refreshParser.RefreshAsync(url).Result;
-                var header = detail.Header;
-                foreach (var pair in header)
+                DetailVideoItem detail;
+                if (_videoPlayer.TryRefreshSegment(curIndex, totalCount, out detail))
                 {
-                    info.SetRequestHeader(pair.Key, pair.Value);
+                    var header = detail.Header;
+                    foreach (var pair in header)
+                    {
+                        info.SetRequestHeader(pair.Key, pair.Value);
+                    }
+                    Debug.WriteLine("update url success \n form {0} \n to {1}", info.Url, detail.Url);
+                    info.Url = detail.Url;
+                    return true;
                 }
-                Debug.WriteLine("update url success \n form {0} \n to {1}", url, detail.Url);
-                info.Url = detail.Url;
             }
             catch (Exception e)
             {
                 ShowExceptionMessage(e.Message);
-                return false;
             }
 
-            return true;
+            return false;
         }
-
-
+        
         private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var url = WebUrlTextBox.Text;
@@ -143,58 +128,18 @@ namespace InvalidPlayer.View
 
             try
             {
-                await GetVideo(url);
-                if (_videos.Count > 1)
-                {
-                    var plist = new Playlist(PlaylistTypes.NetworkHttp);
-                    var cfgs = default(PlaylistNetworkConfigs);
-                    cfgs.UniqueId = DateTime.UtcNow.ToString();
-                    cfgs.DownloadRetryOnFail = true;
-                    cfgs.DetectDurationForParts = false;
-                    cfgs.HttpUserAgent = string.Empty;
-                    cfgs.HttpReferer = string.Empty;
-                    cfgs.HttpCookie = string.Empty;
-                    plist.NetworkConfigs = cfgs;
-                    foreach (var video in _videos)
-                    {
-                        plist.Append(video.Url, video.Size, (float) video.Seconds);
-                    }
-#if DEBUG
-                    var debugFile = Path.Combine(ApplicationData.Current.TemporaryFolder.Path, "DebugFile.mkv");
-                    Debug.WriteLine(string.Format("DebugFile File:{0}", debugFile));
-                    plist.SetDebugFile(debugFile);
-#endif
-                    var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
-                    MainPlayer.Source = new Uri(s);
-                }
-                else if (_videos.Count == 1)
-                {
-                    MainPlayer.Source = new Uri(_videos[0].Url);
-                }
+                _videoPlayer = _playerFactory.GetPlayer(url);
+                await _videoPlayer.StartPlayVideo(MainPlayer);
             }
             catch (Exception exception)
             {
                 ShowExceptionMessage(exception.Message);
             }
         }
-
-        private async Task GetVideo(string url)
+        
+        private async void ShowExceptionMessage(string message)
         {
-            _parser = _videoParser.GetParser(url);
-            AssertUtil.NotNull(_parser, "unsupport url");
-            _videos = await _parser.ParseAsync(url);
-            AssertUtil.NotNull(_videos, "no videos");
-#if DEBUG
-            foreach (var videoItem in _videos)
-            {
-                Debug.WriteLine(videoItem);
-            }
-#endif
-        }
-
-        private void ShowExceptionMessage(string message)
-        {
-            var t = new MessageDialog(message).ShowAsync();
+            await new MessageDialog(message).ShowAsync();
         }
 
         private void AboutBtn_OnClick(object sender, RoutedEventArgs e)
