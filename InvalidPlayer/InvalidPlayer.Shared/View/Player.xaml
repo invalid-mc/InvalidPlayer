@@ -44,7 +44,7 @@
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 TextWrapping="NoWrap" InputScope="Url" />
             <!-- ReSharper disable once Xaml.MissingGridIndex -->
-            <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <StackPanel x:Name="BtnPanel" Orientation="Horizontal">
                 <Button
                     x:Name="SearchBtn" Margin="3,0,3,0"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -56,7 +56,7 @@
                     x:Name="LocalBtn" Margin="3,0"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Content="Local"
-                    Click="LocalBtn_OnClickBtn_OnClick"
+                    Click="LocalBtn_OnClick"
                     Style="{StaticResource NoBorderButtonStyle}" />
 
                 <Button

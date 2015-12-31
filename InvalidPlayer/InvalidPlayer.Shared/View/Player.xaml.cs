@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
@@ -17,6 +15,8 @@ using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 using SYEngineCore;
 #if WINDOWS_PHONE_APP
+using System.Linq;
+using Windows.ApplicationModel.Activation;
 using InvalidPlayer.Common;
 #endif
 
@@ -40,10 +40,25 @@ namespace InvalidPlayer.View
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-            InitInfo();
+
             Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
-            StaticContainer.AutoInject(this);
             Unloaded += Player_Unloaded;
+
+            InitInfo();
+            SetLayout();
+
+            StaticContainer.AutoInject(this);
+        }
+
+        private void SetLayout()
+        {
+#if WINDOWS_PHONE_APP
+            Grid.SetRow(this.BtnPanel, 1);
+            Grid.SetColumn(this.BtnPanel, 0);
+#else
+            Grid.SetRow(this.BtnPanel, 0);
+            Grid.SetColumn(this.BtnPanel, 1);
+#endif
         }
 
         private void Player_Unloaded(object sender, RoutedEventArgs e)
@@ -157,7 +172,7 @@ namespace InvalidPlayer.View
         {
         }
 
-        private async void LocalBtn_OnClickBtn_OnClick(object sender, RoutedEventArgs e)
+        private async void LocalBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var filePicker = new FileOpenPicker {CommitButtonText = "播放", SuggestedStartLocation = PickerLocationId.VideosLibrary};
             filePicker.FileTypeFilter.Add(".mp4");
@@ -167,7 +182,6 @@ namespace InvalidPlayer.View
 #if WINDOWS_PHONE_APP
             filePicker.PickSingleFileAndContinue();
 #else
-        
             var file = await filePicker.PickSingleFileAsync();
             await PlayLocalFile(file);
 #endif
