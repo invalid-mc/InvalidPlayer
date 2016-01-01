@@ -5,4 +5,4 @@ url=https://bitbucket.org/saki_saki/invalidplayerx.git
 	
 [submodule "SYEngine"]
 	path = SYEngine
-	url = https://bitbucket.org/amamiya/syengine
+	url = https://bitbucket.org/amamiya/syengine.git
