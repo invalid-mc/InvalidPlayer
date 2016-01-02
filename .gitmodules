@@ -1,8 +1,8 @@
 [submodule "invalidplayerx"]
 	path = invalidplayerx
-url=https://bitbucket.org/saki_saki/invalidplayerx.git
+	url=https://bitbucket.org/saki_saki/invalidplayerx.git
 
 	
 [submodule "SYEngine"]
 	path = SYEngine
-	url = https://bitbucket.org/amamiya/syengine.git
+	url=https://github.com/amamiya/SYEngine.git
