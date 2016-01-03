@@ -1,26 +1,47 @@
-﻿var parserManager = (function () {
+﻿var parserManager = (function() {
+    var regExpCache = {};
     var cache = {};
 
     function register(parser) {
-        cache[new RegExp(parser.pattern, "gi")] = parser;
+        var pattern = parser.pattern;
+        var rx = new RegExp(pattern, "i");
+        regExpCache[pattern] = rx;
+        cache[pattern] = parser;
     }
 
     function execute(url) {
+        core.invokeServerMethod("Log", "execute "+url);
         for (var key in cache) {
             if (cache.hasOwnProperty(key)) {
                 core.invokeServerMethod("Log", key);
-                //TODO
+                var reg = regExpCache[key];
+                if (reg.test(url)) {
                     core.invokeServerMethod("Log", url);
-                    cache[key].parse(url);
-              
+                    run(cache[key],url);
+                }
             }
         }
     }
 
+    function run(parser,url) {
+        try {
+            parser.parse(url);
+        } catch (e) {
+            core.invokeServerMethod("Error", e.toString());
+        } 
+    }
+
+    function load(scripts,callback) {
+        core.invokeServerMethod("Log", "scripts:" + scripts);
+        LazyLoad.js(scripts.split(","), function () {
+           // core.invokeServerMethod("callback", "LoadEnd");
+        });
+    }
 
     return {
         register: register,
-        execute: execute
-    }
+        execute: execute,
+        load: load
+    };
 })();
-
+core.invokeServerMethod("Log", "parser complete");
