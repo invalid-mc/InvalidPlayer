@@ -40,7 +40,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\HttpClentService.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Service.js" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\jquery-2.1.4.js" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.html" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.js" />
