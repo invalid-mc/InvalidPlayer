@@ -21,7 +21,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoPlayerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\WebVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plugin\IExternalInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin\PluginParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plugin\Web.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin\WebViewEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
@@ -42,10 +44,11 @@
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\jquery-2.1.4.js" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.html" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\scripts\xxxxParser.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Plugin\demo\json.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\demo\xxxxParser.js" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\ParserManager.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\lazyload.js" />
   </ItemGroup>
 </Project>
