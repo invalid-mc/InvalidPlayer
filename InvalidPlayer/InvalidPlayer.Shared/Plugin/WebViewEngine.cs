@@ -87,7 +87,7 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
                 CreationCollisionOption.OpenIfExists);
             var scriptsFiles = await scriptsFolder.GetFilesAsync();
             var names = scriptsFiles.Select(f => "parsers/" + f.Name);
-            var t= CallAsync("parserManager.load", string.Join("|", names));
+            var t = CallAsync("parserManager.load", string.Join("|", names));
         }
 
         [Init]
@@ -142,7 +142,12 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
         public void TaskCallback<T>(Task<T> task, string callback)
         {
             var dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            task.ContinueWith(t => { var tmp = dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { var x = CallAsync(callback, t.Result as string).ConfigureAwait(false); }); });
+            task.ContinueWith(
+                t =>
+                {
+                    var tmp = dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        () => { var x = CallAsync(callback, t.Result as string).ConfigureAwait(false); });
+                });
         }
 
         #region  IExternalInterface
@@ -168,7 +173,7 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
 
             throw new ServiceException(string.Format("no function:{0}", param));
         }
-        
+
         public async Task<string> CallAsync(params string[] arguments)
         {
             var funcName = arguments.First();

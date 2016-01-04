@@ -50,6 +50,5 @@
     <None Include="$(MSBuildThisFileDirectory)Plugin\demo\json.json" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\ParserManager.js" />
     <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\lazyload.js" />
-    <None Include="$(MSBuildThisFileDirectory)Plugin\JsCore\scripts\AcfunDemo.js" />
   </ItemGroup>
 </Project>

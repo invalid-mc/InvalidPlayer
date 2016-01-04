@@ -12,7 +12,6 @@ namespace InvalidPlayer.Plugin
 {
     [Singleton]
     [WebUrlPattern(@"https://github.com[^\s]+")]
-    [WebUrlPattern(@"\w+://[^/]*acfun.tv/.*ac=(\d+)")]
     public class PluginParser : IVideoParser
     {
         [Inject]
