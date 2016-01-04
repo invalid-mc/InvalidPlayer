@@ -22,6 +22,7 @@ namespace InvalidPlayer.Plugin
 
         public Task<List<VideoItem>> ParseAsync(string url)
         {
+            _taskCompletionSource = new TaskCompletionSource<List<VideoItem>>();
             var t = _externalInterface.CallAsync("parserManager.execute", url);
             return _taskCompletionSource.Task;
         }
@@ -30,7 +31,7 @@ namespace InvalidPlayer.Plugin
         [Init]
         public void Init()
         {
-            _taskCompletionSource = new TaskCompletionSource<List<VideoItem>>();
+            
         }
 
         public void Callback(string url)

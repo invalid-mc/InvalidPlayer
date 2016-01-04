@@ -172,16 +172,23 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
         public async Task<string> CallAsync(params string[] arguments)
         {
             var funcName = arguments.First();
-            string result;
+            string result=String.Empty;
 
-            if (funcName.IndexOf(".", StringComparison.Ordinal) >= 0)
+            try
             {
-                result = await _webView.InvokeScriptAsync("execute", arguments);
+                if (funcName.IndexOf(".", StringComparison.Ordinal) >= 0)
+                {
+                    result = await _webView.InvokeScriptAsync("execute", arguments);
+                }
+                else
+                {
+                    var array = arguments.Skip(1);
+                    result = await _webView.InvokeScriptAsync(funcName, arguments.Skip(1));
+                }
             }
-            else
+            catch (Exception e)
             {
-                var array = arguments.Skip(1);
-                result = await _webView.InvokeScriptAsync(funcName, arguments.Skip(1));
+                Debug.WriteLine(e);
             }
             return result;
         }
