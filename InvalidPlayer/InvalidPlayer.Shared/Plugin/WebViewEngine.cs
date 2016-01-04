@@ -83,10 +83,11 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
 
         public async void LoadParesers()
         {
-            var scriptsFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("parsers", CreationCollisionOption.OpenIfExists);
+            var scriptsFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("parsers",
+                CreationCollisionOption.OpenIfExists);
             var scriptsFiles = await scriptsFolder.GetFilesAsync();
             var names = scriptsFiles.Select(f => "parsers/" + f.Name);
-            var t= CallAsync("parserManager.load", string.Join(",", names));
+            var t= CallAsync("parserManager.load", string.Join("|", names));
         }
 
         [Init]
@@ -167,14 +168,13 @@ namespace InvalidPlayerCore.Plugin.JavascriptEngine
 
             throw new ServiceException(string.Format("no function:{0}", param));
         }
-
-
+        
         public async Task<string> CallAsync(params string[] arguments)
         {
             var funcName = arguments.First();
             string result;
 
-            if (funcName.IndexOf(".", StringComparison.Ordinal) != -1)
+            if (funcName.IndexOf(".", StringComparison.Ordinal) >= 0)
             {
                 result = await _webView.InvokeScriptAsync("execute", arguments);
             }

@@ -1,6 +1,6 @@
 ﻿var core = (function() {
 
-    window.debug = false;
+    window.debug = true;
 
     function notify(content) {
         if (debug) {
