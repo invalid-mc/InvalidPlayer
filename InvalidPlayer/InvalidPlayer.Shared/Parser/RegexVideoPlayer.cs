@@ -42,12 +42,11 @@ namespace InvalidPlayer.Parser
             _parsers = new Dictionary<Regex, IVideoParser>(_parserList.Count);
             foreach (var parser in _parserList)
             {
-                var pattern = parser.GetType().GetTypeInfo().GetCustomAttribute<WebUrlPatternAttribute>();
-                if (null != pattern)
+                var patterns = parser.GetType().GetTypeInfo().GetCustomAttributes<WebUrlPatternAttribute>();
+                foreach (var pattern in patterns)
                 {
-                    Debug.WriteLine("register parser:{0} {1}", pattern.Pattern, parser);
-                    var regex = new Regex(pattern.Pattern);
-                    _parsers.Add(regex, parser);
+                    Debug.WriteLine("register parser: {0} {1}", pattern.Pattern, parser);
+                    _parsers.Add(new Regex(pattern.Pattern), parser);
                 }
             }
         }

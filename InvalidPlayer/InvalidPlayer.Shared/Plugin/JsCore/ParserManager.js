@@ -7,6 +7,7 @@
         var rx = new RegExp(pattern, "i");
         regExpCache[pattern] = rx;
         cache[pattern] = parser;
+        core.invokeServerMethod("Log", "register: " + pattern);
     }
 
     function execute(url) {
@@ -33,7 +34,7 @@
 
     function load(scripts,callback) {
         core.invokeServerMethod("Log", "scripts:" + scripts);
-        LazyLoad.js(scripts.split(","), function () {
+        LazyLoad.js(scripts.split("|"), function () {
            // core.invokeServerMethod("callback", "LoadEnd");
         });
     }
