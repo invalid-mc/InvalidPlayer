@@ -10,7 +10,7 @@ using InvalidPlayer.View;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Exceptions;
 using InvalidPlayerParser;
-using SYEngineCore;
+using SYEngine;
 #if WINDOWS_PHONE_APP
 using InvalidPlayer.Common;
 #endif

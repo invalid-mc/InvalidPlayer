@@ -16,12 +16,6 @@ namespace InvalidPlayerCore.Container
         public object GetInstance(Type beanType)
         {
             var info = beanType.GetTypeInfo();
-            if (info.IsGenericType)
-            {
-                var genericTypeArguments = info.GenericTypeArguments;
-                var constructed = typeof (List<>).MakeGenericType(genericTypeArguments);
-                return Activator.CreateInstance(constructed);
-            }
             return Activator.CreateInstance(beanType);
         }
     }

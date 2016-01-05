@@ -120,9 +120,9 @@
       <Project>{baa96dd4-7884-484d-8315-7679f16bdadd}</Project>
       <Name>InvalidPlayerParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SYEngine\SYEngineCore\SYEngineCore.WindowsPhone\SYEngineCore.WindowsPhone.vcxproj">
+    <ProjectReference Include="..\..\SYEngine\SYEngine\SYEngine.WindowsPhone\SYEngine.WindowsPhone.vcxproj">
       <Project>{6c77118b-c47c-461b-8d53-ab673c312dac}</Project>
-      <Name>SYEngineCore.WindowsPhone</Name>
+      <Name>SYEngine.WindowsPhone</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

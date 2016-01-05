@@ -11,31 +11,36 @@
     }
 
     function execute(url) {
-        core.invokeServerMethod("Log", "execute "+url);
+        core.invokeServerMethod("Log", "execute " + url);
+        var parser;
         for (var key in cache) {
             if (cache.hasOwnProperty(key)) {
                 core.invokeServerMethod("Log", key);
                 var reg = regExpCache[key];
                 if (reg.test(url)) {
                     core.invokeServerMethod("Log", url);
-                    run(cache[key],url);
+                    parser = cache[key];
+                    break;
                 }
             }
         }
+        if (parser) {
+            run(parser, url);
+        }
     }
 
-    function run(parser,url) {
+    function run(parser, url) {
         try {
             parser.parse(url);
         } catch (e) {
             core.invokeServerMethod("Error", e.toString());
-        } 
+        }
     }
 
-    function load(scripts,callback) {
+    function load(scripts, callback) {
         core.invokeServerMethod("Log", "scripts:" + scripts);
-        LazyLoad.js(scripts.split("|"), function () {
-           // core.invokeServerMethod("callback", "LoadEnd");
+        LazyLoad.js(scripts.split("|"), function() {
+            // core.invokeServerMethod("callback", "LoadEnd");
         });
     }
 
