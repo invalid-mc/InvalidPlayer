@@ -164,7 +164,7 @@ namespace InvalidPlayerCore.Container
                 if (requiredBeanTypeInfo.IsGenericType)
                 {
                     var genericTypeArguments = requiredBeanTypeInfo.GenericTypeArguments;
-                    var listType = typeof (ICollection<>).MakeGenericType(genericTypeArguments);
+                    var listType = typeof (List<>).MakeGenericType(genericTypeArguments);
 
                     if (listType.GetTypeInfo().IsAssignableFrom(requiredBeanTypeInfo))
                     {
