@@ -14,7 +14,7 @@ using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
-using SYEngineCore;
+using SYEngine;
 #if WINDOWS_PHONE_APP
 using System.Linq;
 using Windows.ApplicationModel.Activation;

@@ -7,8 +7,8 @@ using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using Windows.UI.Xaml.Controls;
 using InvalidPlayerCore.Service;
-using SYEngineCore;
 using System.IO;
+using SYEngine;
 
 namespace InvalidPlayer.Parser
 {
