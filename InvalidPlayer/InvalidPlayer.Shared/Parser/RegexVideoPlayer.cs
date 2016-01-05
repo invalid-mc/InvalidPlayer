@@ -7,6 +7,8 @@ using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Parser.Attributes;
 
+#pragma warning disable 649
+
 namespace InvalidPlayer.Parser
 {
     [Singleton("RegexVideoPlayer")]
@@ -24,7 +26,7 @@ namespace InvalidPlayer.Parser
             get { return _url; }
             set { SetCurrentParser(_url = value); }
         }
-        
+
         private void SetCurrentParser(string url)
         {
             Debug.WriteLine("weburl:{0}", url);
