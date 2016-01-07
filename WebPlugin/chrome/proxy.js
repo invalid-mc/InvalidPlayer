@@ -1,6 +1,8 @@
-window.onload = function () {
-    window.open("weburl://?url=www.xxx.com", '_self');
-    setTimeout(function() {
-        document.getElementById("ax").innerText = "test";
-    }, 2000);
-};
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    var url = document.location.href;
+    if(url != request.url) {
+        return;
+    }
+    
+    window.location.href = "weburl://?url=" + encodeURI(url);
+})
