@@ -9,32 +9,37 @@ using InvalidPlayerCore.Service;
 
 namespace InvalidPlayerCore.Controls
 {
-    public static class YukiPopupManager
+    public static class PopupManager
     {
-        public static bool HasPopup()
+        public static bool HasPopup(string tag)
         {
-            var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
+            if (null == tag) return false;
 
-            return popups.Any(popup => "YukiPopup".Equals(popup.Tag));
+            var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
+            return popups.Any(popup => tag.Equals(popup.Tag));
         }
 
-        public static void ClosePopup()
+        public static void ClosePopup(string tag)
         {
+            if (null == tag) return;
+
             var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
-            foreach (var popup in popups.Where(popup => "YukiPopup".Equals(popup.Tag)))
+            foreach (var popup in popups.Where(popup => tag.Equals(popup.Tag)))
             {
                 popup.IsOpen = false;
             }
         }
 
-        public static bool CanClosePopup()
+        public static bool CanClosePopup(string tag)
         {
+            if (null == tag) return false;
+
             var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
-            return popups.Where(popup => "YukiPopup".Equals(popup.Tag)).All(popup => popup.IsLightDismissEnabled);
+            return popups.Where(popup => tag.Equals(popup.Tag)).All(popup => popup.IsLightDismissEnabled);
         }
     }
 
-    public class YukiPopup : UserControl
+    public abstract class YukiPopup : Control
     {
         public event EventHandler<object> Closed;
 
@@ -48,10 +53,11 @@ namespace InvalidPlayerCore.Controls
 
         public bool FullScreen { get; set; } = true;
 
+        protected abstract string GetTag();
 
         public void Show()
         {
-            _pop = new Popup { Tag = "YukiPopup" };
+            _pop = new Popup { Tag = GetTag() };
             _pop.Transitions?.Add(new PopupThemeTransition());
             
             _pop.Opened += Pop_Opened;
@@ -77,7 +83,10 @@ namespace InvalidPlayerCore.Controls
         private void RootFrame_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             _pop.Width = e.NewSize.Width;
-            _pop.Height = e.NewSize.Height;
+            if (FullScreen)
+            {
+                _pop.Height = e.NewSize.Height;
+            }
         }
 
         private void ToggleBottonBar(bool show)
