@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="55483cc8-d786-415e-9fc4-1d1fb7bb03ec" Publisher="CN=saki" Version="1.0.0.1" />
+  <Identity Name="55483cc8-d786-415e-9fc4-1d1fb7bb03ec" Publisher="CN=ip" Version="1.0.0.1" />
   <Properties>
     <DisplayName>InvalidPlayer</DisplayName>
     <PublisherDisplayName>saki</PublisherDisplayName>
