@@ -9,7 +9,6 @@ using Windows.UI.Xaml.Controls;
 using InvalidPlayer.View;
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Exceptions;
-using InvalidPlayerParser;
 using SYEngine;
 #if WINDOWS_PHONE_APP
 using InvalidPlayer.Common;
@@ -38,7 +37,16 @@ namespace InvalidPlayer
             Task.Run(() => { Core.Initialize(); });
             var list = new List<Assembly>();
             list.Add(GetType().GetTypeInfo().Assembly);
-            list.Add(typeof (Info).GetTypeInfo().Assembly);
+
+            try
+            {
+                var parserAssembly = Assembly.Load(new AssemblyName("InvalidPlayerParser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
+                list.Add(parserAssembly);
+            }
+            catch (Exception)
+            {
+               // throw;
+            }
             list.Add(typeof (StaticContainer).GetTypeInfo().Assembly);
             StaticContainer.Scan(list);
         }
