@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using InvalidPlayerCore.Container;
 
+#pragma warning disable 649
+
 namespace InvalidPlayerCore.Service
 {
     [Singleton]

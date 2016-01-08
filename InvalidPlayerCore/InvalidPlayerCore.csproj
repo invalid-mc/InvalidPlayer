@@ -53,6 +53,7 @@
     <Compile Include="Container\PrototypeAttribute.cs" />
     <Compile Include="Container\SingletonAttribute.cs" />
     <Compile Include="Container\StaticContainer.cs" />
+    <Compile Include="Controls\YukiPopup.cs" />
     <Compile Include="Model\DetailVideoItem.cs" />
     <Compile Include="Model\SubtitlesInfo.cs" />
     <Compile Include="Model\VideoInfo.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Service\Log.cs" />
     <Compile Include="Service\RegexHelper.cs" />
     <Compile Include="Service\SecurityKit.cs" />
+    <Compile Include="Service\UiElementUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

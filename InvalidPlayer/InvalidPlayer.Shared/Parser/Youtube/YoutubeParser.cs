@@ -9,6 +9,8 @@ using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Parser.Attributes;
 using InvalidPlayerCore.Service;
 
+#pragma warning disable 649
+
 namespace InvalidPlayer.Parser.Youtube
 {
     [Singleton]
@@ -21,7 +23,7 @@ namespace InvalidPlayer.Parser.Youtube
 
         [Inject]
         private HttpClientService _httpClientService;
-        
+
         public async Task<List<VideoItem>> ParseAsync(string url)
         {
             var id = GetVideoId(url);
@@ -95,8 +97,8 @@ namespace InvalidPlayer.Parser.Youtube
             }
 
 
-            var videoItem = new VideoItem {Url = videoUrl};
-            var items = new List<VideoItem>(1) {videoItem};
+            var videoItem = new VideoItem { Url = videoUrl };
+            var items = new List<VideoItem>(1) { videoItem };
             return items;
         }
 

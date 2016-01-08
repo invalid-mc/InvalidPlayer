@@ -5,6 +5,8 @@ using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Parser.Attributes;
 
+#pragma warning disable 649
+
 namespace InvalidPlayer.Parser
 {
     [Singleton("HostMatchVideoPlayer")]
@@ -31,20 +33,20 @@ namespace InvalidPlayer.Parser
             Parser = _parsers.ContainsKey(name) ? _parsers[name] : null;
         }
 
-//        public async Task<List<VideoItem>> ParseAsync(string url)
-//        {
-//            var parser = GetParser(url.ToLower());
-//            AssertUtil.NotNull(parser, "unsupport url");
-//            var result= await parser.ParseAsync(url);
-//            Debug.WriteLine(result);
-//            return result;
-//        }
+        //        public async Task<List<VideoItem>> ParseAsync(string url)
+        //        {
+        //            var parser = GetParser(url.ToLower());
+        //            AssertUtil.NotNull(parser, "unsupport url");
+        //            var result= await parser.ParseAsync(url);
+        //            Debug.WriteLine(result);
+        //            return result;
+        //        }
 
         [Init]
         private void InitParser()
         {
             // TODO: use null condition expression
-            _parsers = new Dictionary<string, IVideoParser>(_parserList.Count); 
+            _parsers = new Dictionary<string, IVideoParser>(_parserList.Count);
             foreach (var parser in _parserList)
             {
                 var names = parser.GetType().GetTypeInfo().GetCustomAttributes<HostNameMatchAttribute>();

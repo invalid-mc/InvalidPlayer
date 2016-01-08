@@ -2,6 +2,8 @@
 using InvalidPlayerCore.Container;
 using InvalidPlayerCore.Parser;
 
+#pragma warning disable 649
+
 namespace InvalidPlayer.Parser
 {
     [Singleton("SimpleVideoPlayerFactory")]
