@@ -17,5 +17,16 @@ namespace InvalidPlayerCore.Service
             }
             return null;
         }
+
+        public static string GetMatchString(string source, string pattern, int index)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+
+            var match = Regex.Match(source, pattern);
+            return match.Success ? match.Groups[index].ToString() : null;
+        }
     }
 }

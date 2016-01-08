@@ -24,7 +24,7 @@
             x:Name="MainPlayer"
             IsFullWindow="False"
             HorizontalAlignment="Stretch" VerticalAlignment="Center"
-            AreTransportControlsEnabled="False" AutoPlay="True" IsLooping="True"
+            AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
             BufferingProgressChanged="player_BufferingProgressChanged"
             DownloadProgressChanged="player_DownloadProgressChanged"
             CurrentStateChanged="player_CurrentStateChanged"

@@ -1,25 +1,47 @@
 {
-	"manifest_version" : 2,
-	"name" : "InvalidPlayer",
-	"version" : "0.0.2",
-	
-	"author" : "qife",
-	"description" : "Open the special url with InvalidPlayer",
-	
-	"page_action" : {
-		"default_icon" : {
-			"19" : "icon/icon-19.png",
-			"38" : "icon/icon-38.png"
-		},
-		"default_title" : "Open with InvalidPlayer"
-	},
-	"background" : {
-		"scripts" : ["event.js"],
-		"persistent" : false
-	},
-	
-	"permissions" : [
-		"declarativeContent",
-		"activeTab"
-	]
+    "manifest_version": 2,
+    "name": "InvalidPlayer",
+    "version": "0.0.2",
+    "author": "qife",
+    "description": "Open the special url with InvalidPlayer",
+    "page_action": {
+        "default_icon": {
+            "19": "icon/icon-19.png",
+            "38": "icon/icon-38.png"
+        },
+        "default_title": "Open with InvalidPlayer"
+    },
+    "background": {
+        "scripts": [
+            "event.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.acfun.tv/*ac*",
+                "*://live.bilibili.com/*",
+                "*://*/video/av*",
+                "*://*.douyutv.com/*",
+                "*://*.hunantv.com/*",
+                "*://*.iqiyi.com/*",
+                "*://*.letv.com/*",
+                "*://*.pptv.com/*/*.html",
+                "*://*.v.qq.com/*?vid=*",
+                "*://*.sohu.com/*",
+                "*://*.tudou.com/*",
+                "*://*.youku.com/*id_*",
+                "*://*.youtube.com/*"
+            ],
+            "js": [
+                "proxy.js"
+            ]
+        }
+    ],
+    "permissions": [
+        "declarativeContent",
+        "activeTab",
+        "*://*/*"
+    ]
 }

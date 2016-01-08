@@ -1,13 +1,17 @@
-var regex = "^(\\w+://)?([^/]*douyutv\\.com/[^\\s]+)|" +
+var regex = "^(\\w+://)?" +
+            "([^/]*acfun\\.tv/.*ac=?\\d+)|" +
             "(live\\.bilibili\\.com/\\d+)|" +
             "([^/]+/video/av\\d+/(index(?:_\\d+)?\\.html)?)|" +
+            "([^/]*douyutv\\.com/[^\\s]+)|" +
             "([^/]*hunantv\\.com/[^\\s]+)|" +
             "([^/]*iqiyi\\.com/[^\\s]+)|" +
             "([^/]*letv\\.com/[^\\s]+)|" +
+            "([^/]*pptv\\.com/.*/\\w+\\.html)|" +
             "([^/]*v\\.qq\\.com/.*?\\?vid=\\w+)|" +
             "([^/]*sohu\\.com/[^\\s]+)|" +
             "([^/]*tudou\\.com/[^\\s]+)|" +
-            "([^/]*youku\\.com/.*id_\\w+.*)$";
+            "([^/]*youku\\.com/.*id_\\w+.*)" +
+            "([^/]*youtube\\.com/[^\\s]+)$";
 
 // When the extension is installed or upgraded
 chrome.runtime.onInstalled.addListener(function(){
@@ -36,15 +40,7 @@ chrome.runtime.onInstalled.addListener(function(){
 
 // When page action button clicked
 chrome.pageAction.onClicked.addListener(function(tab) {
-    var url = "weburl://?url=" + encodeURI(tab.url);
-    chrome.tabs.create({ url : url, index : tab.index + 1, openerTabId : tab.id });
-    
-    // chrome.windows.create({ url : url, focused : true, type : "popup" });
-    
-    // var proxyUrl = chrome.runtime.getURL("proxy.html");
-	// chrome.tabs.create({ url : proxyUrl }, function(newTab){
-	// 	// chrome.tabs.executeScript(newTab.id, {
-    //     //     code : "window.location.href=" + url + "; window.close();"
-    //     // });
-	// });
+    chrome.tabs.sendMessage(tab.id, { url : tab.url });
+    //var url = "weburl://?url=" + encodeURI(tab.url);
+    //chrome.tabs.executeScript(tab.id, { file : "proxy.js" });
 });

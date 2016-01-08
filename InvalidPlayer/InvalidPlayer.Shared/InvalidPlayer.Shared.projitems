@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\MediaControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\HostMatchVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\LocalVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\RegexVideoPlayer.cs" />
