@@ -1,4 +1,6 @@
 # InvalidPlayer
+
+[![Join the chat at https://gitter.im/saki-saki/InvalidPlayer](https://badges.gitter.im/saki-saki/InvalidPlayer.svg)](https://gitter.im/saki-saki/InvalidPlayer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A universal player based on [SYEngine](https://github.com/amamiya/SYEngine)
 
 **research purposes only**
