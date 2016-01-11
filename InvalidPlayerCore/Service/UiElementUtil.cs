@@ -23,14 +23,12 @@ namespace InvalidPlayerCore.Service
         {
             // var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
             //  var h = Window.Current.Bounds.Width;
-            var w = RootFrame?.ActualWidth;
-            return w.GetValueOrDefault(400);
+            return RootFrame != null ? RootFrame.ActualWidth : 400;
         }
 
         public static double GetContentViewHeight()
         {
-            var h = RootFrame?.ActualHeight;
-            return h.GetValueOrDefault(800);
+            return RootFrame != null ? RootFrame.ActualHeight : 800;
         }
 
         public static T FindFirstElementInVisualTree<T>(DependencyObject parentElement) where T : DependencyObject

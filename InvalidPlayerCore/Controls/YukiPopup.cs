@@ -47,18 +47,27 @@ namespace InvalidPlayerCore.Controls
 
         private Popup _pop;
 
-        public bool IsLightDismissEnabled { get; set; } = true;
+        public bool IsLightDismissEnabled
+        {
+            get { return true; }
+            set { IsLightDismissEnabled = value; }
+        }
 
         public bool IsToggleBorromBar { get; set; }
 
-        public bool FullScreen { get; set; } = true;
+        public bool FullScreen
+        {
+            get { return true; }
+            set { FullScreen = value; }
+        }
 
         protected abstract string GetTag();
 
         public void Show()
         {
             _pop = new Popup { Tag = GetTag() };
-            _pop.Transitions?.Add(new PopupThemeTransition());
+            if (_pop.Transitions != null)
+                _pop.Transitions.Add(new PopupThemeTransition());
             
             _pop.Opened += Pop_Opened;
             _pop.Closed += Pop_Closed;
@@ -69,10 +78,10 @@ namespace InvalidPlayerCore.Controls
             {
                 rootFrame.SizeChanged += RootFrame_SizeChanged;
             }
-            this.Width = rootFrame?.ActualWidth ?? 400;
+            this.Width = rootFrame != null ? rootFrame.ActualWidth : 400;
             if (FullScreen)
             {
-                this.Height = rootFrame?.ActualHeight ?? 800;
+                this.Height = rootFrame != null ? rootFrame.ActualHeight : 800;
             }
 
             _pop.Child = this;
@@ -92,8 +101,8 @@ namespace InvalidPlayerCore.Controls
         private void ToggleBottonBar(bool show)
         {
             var frame = Window.Current.Content as Frame;
-            var page = frame?.Content as Page;
-            var bar = page?.BottomAppBar;
+            var page = frame != null ? frame.Content as Page : null;
+            var bar = page != null ? page.BottomAppBar : null;
             if (null != bar)
             {
                 bar.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
@@ -106,7 +115,8 @@ namespace InvalidPlayerCore.Controls
             {
                 ToggleBottonBar(true);
             }
-            Closed?.Invoke(this, e);
+            if (Closed != null)
+                Closed.Invoke(this, e);
             var rootFrame = UiElementUtil.RootFrame;
             if (rootFrame != null)
             {
@@ -121,7 +131,8 @@ namespace InvalidPlayerCore.Controls
             {
                 ToggleBottonBar(false);
             }
-            Opened?.Invoke(this, e);
+            if (Opened != null)
+                Opened.Invoke(this, e);
         }
 
 
