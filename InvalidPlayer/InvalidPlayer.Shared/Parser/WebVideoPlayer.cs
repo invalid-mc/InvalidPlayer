@@ -51,8 +51,8 @@ namespace InvalidPlayer.Parser
                 Debug.WriteLine(string.Format("DebugFile File:{0}", debugFile));
                 plist.SetDebugFile(debugFile);
 #endif
-                var s = "plist://WinRT-TemporaryFolder_" + Path.GetFileName(await plist.SaveAndGetFileUriAsync());
-                element.Source = new Uri(s);
+                var uri = await plist.SaveAndGetFileUriAsync();
+                element.Source = uri;
             }
             else if (Videos.Count == 1)
             {
