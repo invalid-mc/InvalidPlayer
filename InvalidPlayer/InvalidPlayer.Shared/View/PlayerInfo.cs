@@ -23,6 +23,10 @@ namespace InvalidPlayer.View
                 Windows.Phone.UI.Input.HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
                 Windows.Phone.UI.Input.HardwareButtons.CameraReleased += HardwareButtons_CameraReleased;
 #endif
+
+#if WINDOWS_UWP
+                Init();
+#endif
             };
             this.Unloaded += delegate
             {
@@ -116,7 +120,7 @@ namespace InvalidPlayer.View
                 : Visibility.Visible;
         }
 
-        #region Format String
+#region Format String
 
         private const string VideoInfoStr = "原始分辨率：{0} * {1}\n" +
                                             "视频纵横比：{2} * {3}\n" +
@@ -138,7 +142,7 @@ namespace InvalidPlayer.View
                                            "默认播放速率：{2}\n" +
                                            "视频拉伸方式：{3}\n";
 
-        #endregion
+#endregion
 
         private void SetInfoVisible(bool visible)
         {

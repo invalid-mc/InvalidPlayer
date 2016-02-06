@@ -3,12 +3,12 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{F6C73521-109E-4B01-992F-5122F3E32FAB}</ProjectGuid>
-    <OutputType>AppContainerExe</OutputType>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{338C73FB-5A3E-4959-8AA1-18AD5ABF6DC8}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InvalidPlayer.Universal</RootNamespace>
-    <AssemblyName>InvalidPlayer.Universal</AssemblyName>
+    <RootNamespace>JsRuntime</RootNamespace>
+    <AssemblyName>JsRuntime</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -16,9 +16,28 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>InvalidPlayer.Universal_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
@@ -27,9 +46,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
@@ -38,10 +57,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
@@ -50,9 +68,9 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
     <OutputPath>bin\ARM\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
@@ -61,10 +79,9 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
@@ -73,9 +90,9 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
@@ -84,55 +101,44 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player.cs" />
+    <Compile Include="Hosting\JavaScriptBackgroundWorkItemCallback.cs" />
+    <Compile Include="Hosting\JavaScriptBeforeCollectCallback.cs" />
+    <Compile Include="Hosting\JavaScriptContext.cs" />
+    <Compile Include="Hosting\JavaScriptEngineException.cs" />
+    <Compile Include="Hosting\JavaScriptErrorCode.cs" />
+    <Compile Include="Hosting\JavaScriptException.cs" />
+    <Compile Include="Hosting\JavaScriptFatalException.cs" />
+    <Compile Include="Hosting\JavaScriptMemoryAllocationCallback.cs" />
+    <Compile Include="Hosting\JavaScriptMemoryEventType.cs" />
+    <Compile Include="Hosting\JavaScriptNativeFunction.cs" />
+    <Compile Include="Hosting\JavaScriptObjectBeforeCollectCallback.cs" />
+    <Compile Include="Hosting\JavaScriptObjectFinalizeCallback.cs" />
+    <Compile Include="Hosting\JavaScriptProjectionEnqueueCallback.cs" />
+    <Compile Include="Hosting\JavaScriptPromiseContinuationCallback.cs" />
+    <Compile Include="Hosting\JavaScriptPropertyId.cs" />
+    <Compile Include="Hosting\JavaScriptPropertyIdType.cs" />
+    <Compile Include="Hosting\JavaScriptRuntime.cs" />
+    <Compile Include="Hosting\JavaScriptRuntimeAttributes.cs" />
+    <Compile Include="Hosting\JavaScriptRuntimeVersion.cs" />
+    <Compile Include="Hosting\JavaScriptScriptException.cs" />
+    <Compile Include="Hosting\JavaScriptSerializedScriptLoadSourceCallback.cs" />
+    <Compile Include="Hosting\JavaScriptSerializedScriptUnloadCallback.cs" />
+    <Compile Include="Hosting\JavaScriptSourceContext.cs" />
+    <Compile Include="Hosting\JavaScriptThreadServiceCallback.cs" />
+    <Compile Include="Hosting\JavaScriptTypedArrayType.cs" />
+    <Compile Include="Hosting\JavaScriptUsageException.cs" />
+    <Compile Include="Hosting\JavaScriptValue.cs" />
+    <Compile Include="Hosting\JavaScriptValueType.cs" />
+    <Compile Include="Hosting\Native.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\JsRuntime.rd.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest">
-      <SubType>Designer</SubType>
-    </AppxManifest>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\InvalidPlayerCore\InvalidPlayerCore.csproj">
-      <Project>{e4f614e5-616d-4f5e-99bc-3a7025db6390}</Project>
-      <Name>InvalidPlayerCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\invalidplayerx\InvalidPlayerParser\InvalidPlayerParser.csproj">
-      <Project>{baa96dd4-7884-484d-8315-7679f16bdadd}</Project>
-      <Name>InvalidPlayerParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\InvalidPlayery\InvalidPlayerPlugin\InvalidPlayerPlugin.csproj">
-      <Project>{265167a2-0dc8-465e-b53f-d98729b8bada}</Project>
-      <Name>InvalidPlayerPlugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\JsRuntime\JsRuntime.csproj">
-      <Project>{338c73fb-5a3e-4959-8aa1-18ad5abf6dc8}</Project>
-      <Name>JsRuntime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SYEngine\SYEngine\SYEngine.Universal\SYEngine.Universal.vcxproj">
-      <Project>{e5741a57-347a-40e3-8be7-8add0d3440a5}</Project>
-      <Name>SYEngine.Universal</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="..\InvalidPlayer.Shared\InvalidPlayer.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
