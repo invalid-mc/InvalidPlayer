@@ -10,7 +10,6 @@ Insert the follow code to your browser favorites:
 javascript:!((function(){this.url=document.location.href;url="weburl://?url="+encodeURI(url);document.location.href=url;})());
 ```
 
-[![Bintray](https://img.shields.io/bintray/v/asciidoctor/maven/asciidoctorj.svg)]()
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ppvgodpusq12g59t?svg=true)](https://ci.appveyor.com/project/saki-saki/invalidplayer)
 
