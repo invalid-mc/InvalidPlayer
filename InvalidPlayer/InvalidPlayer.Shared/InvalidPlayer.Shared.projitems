@@ -9,23 +9,12 @@
     <Import_RootNamespace>InvalidPlayer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\MediaControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\HostMatchVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\LocalVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\RegexVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\VideoPlayerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\WebVideoPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser\Youtube\YoutubeParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Plugin\IExternalInterface.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Plugin\PluginParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Plugin\Web.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Plugin\WebViewEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>
@@ -39,17 +28,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Service.js" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\jquery-2.1.4.js" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.html" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\Main.js" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\scripts\xxxxParser.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Plugin\demo\json.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\ParserManager.js" />
-    <Content Include="$(MSBuildThisFileDirectory)Plugin\JsCore\lib\lazyload.js" />
   </ItemGroup>
 </Project>

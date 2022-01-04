@@ -14,21 +14,12 @@ using InvalidPlayerCore.Model;
 using InvalidPlayerCore.Parser;
 using InvalidPlayerCore.Service;
 using SYEngine;
-#if WINDOWS_PHONE_APP
-using System.Linq;
-using Windows.ApplicationModel.Activation;
-using InvalidPlayer.Common;
-#endif
-
-#pragma warning disable 649
+using Windows.ApplicationModel;
 
 namespace InvalidPlayer.View
 {
-#if WINDOWS_PHONE_APP
-    public sealed partial class Player : Page, IFileOpenPickerContinuable
-#else
+
     public sealed partial class Player : Page
-#endif
 
     {
         [Inject("SimpleVideoPlayerFactory")]
@@ -40,8 +31,7 @@ namespace InvalidPlayer.View
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-
-            Core.PlaylistSegmentDetailUpdateEvent += Core_PlaylistSegmentDetailUpdateEvent;
+            SYEngine.Core.PlaylistSegmentDetailUpdateDelegate += Core_PlaylistSegmentDetailUpdateEvent;
             Unloaded += Player_Unloaded;
 
             InitInfo();
@@ -52,18 +42,14 @@ namespace InvalidPlayer.View
 
         private void SetLayout()
         {
-#if WINDOWS_PHONE_APP
-            Grid.SetRow(this.BtnPanel, 1);
-            Grid.SetColumn(this.BtnPanel, 0);
-#else
+
             Grid.SetRow(this.BtnPanel, 0);
             Grid.SetColumn(this.BtnPanel, 1);
-#endif
         }
 
         private void Player_Unloaded(object sender, RoutedEventArgs e)
         {
-            Core.PlaylistSegmentDetailUpdateEvent -= Core_PlaylistSegmentDetailUpdateEvent;
+            Core.PlaylistSegmentDetailUpdateDelegate -= Core_PlaylistSegmentDetailUpdateEvent;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -118,8 +104,7 @@ namespace InvalidPlayer.View
         {
             try
             {
-                DetailVideoItem detail;
-                if (_videoPlayer.TryRefreshSegment(curIndex, totalCount, out detail))
+                if (_videoPlayer.TryRefreshSegment(curIndex, totalCount, out var detail))
                 {
                     var header = detail.Header;
                     foreach (var pair in header)
@@ -139,7 +124,7 @@ namespace InvalidPlayer.View
             return false;
         }
 
-        private async void YoukuBtn_OnClick(object sender, RoutedEventArgs e)
+        private async void OpenBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var url = WebUrlTextBox.Text;
             if (!string.IsNullOrEmpty(url))
@@ -168,32 +153,26 @@ namespace InvalidPlayer.View
             await new MessageDialog(message).ShowAsync();
         }
 
-        private void AboutBtn_OnClick(object sender, RoutedEventArgs e)
+        private async void AboutBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            var version = Package.Current.Id.Version;
+            var contentDialog = new ContentDialog();
+            contentDialog.Title = "About";
+            contentDialog.CloseButtonText = "Close";
+            contentDialog.Content = $"{Package.Current.DisplayName}\nVersion: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+            _ = contentDialog.ShowAsync();
         }
 
         private async void LocalBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            var filePicker = new FileOpenPicker {CommitButtonText = "播放", SuggestedStartLocation = PickerLocationId.VideosLibrary};
+            var filePicker = new FileOpenPicker { CommitButtonText = "播放", SuggestedStartLocation = PickerLocationId.VideosLibrary };
             filePicker.FileTypeFilter.Add(".mp4");
             filePicker.FileTypeFilter.Add(".mkv");
             filePicker.FileTypeFilter.Add(".flv");
-
-#if WINDOWS_PHONE_APP
-            filePicker.PickSingleFileAndContinue();
-#else
             var file = await filePicker.PickSingleFileAsync();
             await PlayLocalFile(file);
-#endif
         }
 
-#if WINDOWS_PHONE_APP
-        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
-        {
-            var file = args.Files.FirstOrDefault();
-            await PlayLocalFile(file);
-        }
-#endif
 
         private async Task PlayLocalFile(StorageFile file)
         {

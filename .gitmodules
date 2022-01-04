@@ -5,4 +5,4 @@
 	
 [submodule "SYEngine"]
 	path = SYEngine
-url=https://github.com/saki-saki/SYEngine
+url=git@github.com:invalid-mc/SYEngine.git

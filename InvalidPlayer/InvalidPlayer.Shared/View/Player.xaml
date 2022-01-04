@@ -1,93 +1,91 @@
-﻿<Page
-    x:Class="InvalidPlayer.View.Player"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+﻿<Page x:Class="InvalidPlayer.View.Player"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:msux="using:Microsoft.UI.Xaml.Controls"
+      msux:BackdropMaterial.ApplyToRootOrPageBackground="True"
+      mc:Ignorable="d">
 
     <Grid Margin="0">
-        <!--        <Grid.RowDefinitions>-->
-        <!--            <RowDefinition Height="*" />-->
-        <!--            <RowDefinition Height="30" />-->
-        <!--            <RowDefinition Height="45" />-->
-        <!--            <RowDefinition Height="45" />-->
-        <!--            <RowDefinition Height="5" />-->
-        <!--        </Grid.RowDefinitions>-->
-        <!--        <Grid.ColumnDefinitions>-->
-        <!--            <ColumnDefinition Width="1*" />-->
-        <!--            <ColumnDefinition Width="2*" />-->
-        <!--        </Grid.ColumnDefinitions>-->
-        <Rectangle Fill="DeepPink" />
+        <MediaElement x:Name="MainPlayer"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center"
+                      AreTransportControlsEnabled="True"
+                      AutoPlay="True"
+                      BufferingProgressChanged="player_BufferingProgressChanged"
+                      CurrentStateChanged="player_CurrentStateChanged"
+                      DownloadProgressChanged="player_DownloadProgressChanged"
+                      IsFullWindow="False"
+                      IsLooping="True" />
 
-        <MediaElement
-            x:Name="MainPlayer"
-            IsFullWindow="False"
-            HorizontalAlignment="Stretch" VerticalAlignment="Center"
-            AreTransportControlsEnabled="True" AutoPlay="True" IsLooping="True"
-            BufferingProgressChanged="player_BufferingProgressChanged"
-            DownloadProgressChanged="player_DownloadProgressChanged"
-            CurrentStateChanged="player_CurrentStateChanged"
-            />
-
-        <Grid x:Name="InputGrid" VerticalAlignment="Top">
+        <Grid x:Name="InputGrid"
+              VerticalAlignment="Top"
+              Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <!-- If phone, change grid index with csharp code -->
-            <TextBox
-                x:Name="WebUrlTextBox"
-                Margin="8,8,3,8" Text=""
-                HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                TextWrapping="NoWrap" InputScope="Url" />
-            <!-- ReSharper disable once Xaml.MissingGridIndex -->
-            <StackPanel x:Name="BtnPanel" Orientation="Horizontal">
-                <Button
-                    x:Name="SearchBtn" Margin="8,0,3,0"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    Content="Play"
-                    Click="YoukuBtn_OnClick"
-                    Style="{StaticResource NoBorderButtonStyle}" />
-                
-                <Button
-                    x:Name="LocalBtn" Margin="3,0"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    Content="Local"
-                    Click="LocalBtn_OnClick"
-                    Style="{StaticResource NoBorderButtonStyle}" />
 
-                <Button
-                    x:Name="AboutBtn" Margin="3,0,8,0"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    Content="?"
-                    Click="AboutBtn_OnClick"
-                    Style="{StaticResource NoBorderButtonStyle}" />
+            <TextBox x:Name="WebUrlTextBox"
+                     Margin="8,8,4,8"
+                     HorizontalAlignment="Stretch"
+                     InputScope="Url"
+                     Text=""
+                     TextWrapping="NoWrap" />
+            <StackPanel x:Name="BtnPanel"
+                        Orientation="Horizontal">
+                <Button x:Name="SearchBtn"
+                        Margin="4,0,4,0"
+                        Click="OpenBtn_OnClick"
+                        Content="Play" />
+
+                <Button x:Name="LocalBtn"
+                        Margin="4,0,4,0"
+                        Click="LocalBtn_OnClick"
+                        Content="Local" />
+
+                <Button x:Name="AboutBtn"
+                        Margin="4,0,8,0"
+                        Click="AboutBtn_OnClick"
+                        Content="?" />
             </StackPanel>
         </Grid>
 
-        <StackPanel x:Name="InfoPanel" Margin="0,48"  Visibility="Collapsed" Background="#66000000">
+        <StackPanel x:Name="InfoPanel"
+                    Margin="0,48"
+                    Background="#66000000"
+                    Visibility="Collapsed">
             <StackPanel.Resources>
                 <Style TargetType="TextBlock">
-                    <Setter Property="FontSize" Value="18"/>
-                    <Setter Property="Margin" Value="24,2"/>
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="Margin" Value="24,2" />
                 </Style>
             </StackPanel.Resources>
-            <TextBlock Text="视频信息" FontSize="23"/>
-            <TextBlock x:Name="VideoInfo"/>
-            <TextBlock Text="播放信息" FontSize="23"/>
-            <TextBlock x:Name="PlayInfo"/>
-            <TextBlock Text="~播放器信息" FontSize="23"/>
-            <TextBlock x:Name="MediaElemInfo"/>
+            <TextBlock FontSize="23"
+                       Text="视频信息" />
+            <TextBlock x:Name="VideoInfo" />
+            <TextBlock FontSize="23"
+                       Text="播放信息" />
+            <TextBlock x:Name="PlayInfo" />
+            <TextBlock FontSize="23"
+                       Text="~播放器信息" />
+            <TextBlock x:Name="MediaElemInfo" />
         </StackPanel>
 
-        <Border x:Name="ProgressInfo" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="4" Margin="2,45" Visibility="Collapsed"  Background="#66000000">
-            <TextBlock x:Name="ProgressInfoText" FontSize="18">
-            </TextBlock>
+        <Border x:Name="ProgressInfo"
+                Margin="4,32"
+                Padding="4"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Background="#66000000"
+                Visibility="Collapsed">
+            <TextBlock x:Name="ProgressInfoText"
+                       FontSize="18" />
         </Border>
     </Grid>
 </Page>
